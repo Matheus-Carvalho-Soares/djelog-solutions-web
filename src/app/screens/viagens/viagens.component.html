@@ -1,0 +1,301 @@
+<div class="viagens-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <div class="page-title-group">
+        <div class="title-accent"></div>
+        <div>
+          <h1 class="page-title">VIAGENS</h1>
+          <p class="page-subtitle">Gestão de viagens e fretes</p>
+        </div>
+      </div>
+      <div class="counter-badge" *ngIf="!isLoading">
+        <mat-icon class="counter-icon">swap_horiz</mat-icon>
+        <span class="counter-value">{{ filteredViagens.length }}</span>
+        <span class="counter-label">REGISTROS</span>
+      </div>
+    </div>
+
+    <button class="create-btn" (click)="openCreateDialog()">
+      <mat-icon>add_circle</mat-icon>
+      <span>Nova Viagem</span>
+      <div class="btn-glow"></div>
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <div class="loading-pulse">
+      <div class="pulse-ring"></div>
+      <div class="pulse-ring delay-1"></div>
+      <div class="pulse-ring delay-2"></div>
+      <mat-icon class="loading-icon">swap_horiz</mat-icon>
+    </div>
+    <p class="loading-text">Carregando viagens...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="hasError && !isLoading">
+    <div class="error-icon-wrapper">
+      <mat-icon class="error-icon">warning_amber</mat-icon>
+    </div>
+    <p class="error-title">Falha ao carregar dados</p>
+    <p class="error-subtitle">Verifique a conexão com o servidor</p>
+    <button class="retry-btn" (click)="loadViagens()">
+      <mat-icon>refresh</mat-icon>
+      <span>Tentar Novamente</span>
+    </button>
+  </div>
+
+  <!-- Table Panel -->
+  <div class="table-panel" *ngIf="!isLoading && !hasError">
+    <div class="table-scan-line"></div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar" *ngIf="viagens.length > 0">
+      <button class="filter-toggle-btn" (click)="toggleFilters()" [class.active]="filtersVisible || hasActiveFilters">
+        <mat-icon>filter_list</mat-icon>
+        <span>Filtros</span>
+        <div class="filter-indicator" *ngIf="hasActiveFilters"></div>
+      </button>
+
+      <div class="filter-fields" [class.visible]="filtersVisible">
+        <div class="filter-group">
+          <label class="filter-label">
+            <mat-icon class="filter-label-icon">location_on</mat-icon>
+            LOCALIZAÇÃO
+          </label>
+          <div class="filter-input-wrapper">
+            <input
+              type="text"
+              class="filter-input"
+              [(ngModel)]="filterLocalizacao"
+              (ngModelChange)="applyFilters()"
+              placeholder="Buscar por localização..."
+              autocomplete="off"
+            />
+            <mat-icon class="filter-search-icon">search</mat-icon>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">
+            <mat-icon class="filter-label-icon">business</mat-icon>
+            EMPRESA
+          </label>
+          <div class="filter-input-wrapper">
+            <input
+              type="text"
+              class="filter-input"
+              [(ngModel)]="filterEmpresa"
+              (ngModelChange)="applyFilters()"
+              placeholder="Buscar por empresa..."
+              autocomplete="off"
+            />
+            <mat-icon class="filter-search-icon">search</mat-icon>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">
+            <mat-icon class="filter-label-icon">flag</mat-icon>
+            STATUS
+          </label>
+          <div class="filter-select-wrapper">
+            <select
+              class="filter-select"
+              [(ngModel)]="filterStatus"
+              (ngModelChange)="applyFilters()"
+            >
+              <option value="todos">Todos</option>
+              <option value="EM_ANDAMENTO">Em Andamento</option>
+              <option value="CONCLUIDA">Concluída</option>
+              <option value="CANCELADA">Cancelada</option>
+            </select>
+            <mat-icon class="filter-select-arrow">expand_more</mat-icon>
+          </div>
+        </div>
+
+        <button class="filter-clear-btn" *ngIf="hasActiveFilters" (click)="clearFilters()">
+          <mat-icon>clear</mat-icon>
+          <span>Limpar</span>
+        </button>
+      </div>
+
+      <div class="filter-results" *ngIf="hasActiveFilters">
+        <span class="results-count">{{ filteredViagens.length }}</span>
+        <span class="results-label">de {{ viagens.length }} registros</span>
+      </div>
+    </div>
+
+    <div class="table-container" *ngIf="viagens.length > 0">
+      <table mat-table [dataSource]="filteredViagens" class="viagens-table">
+
+        <!-- Coluna Profissional -->
+        <ng-container matColumnDef="profissional">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">person</mat-icon>
+              MOTORISTA
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let v">
+            <div class="profissional-cell" *ngIf="v.profissional">
+              <div class="profissional-avatar">
+                {{ v.profissional.nome?.charAt(0)?.toUpperCase() || '?' }}
+              </div>
+              <span class="profissional-name">{{ v.profissional.nome }}</span>
+            </div>
+            <span class="no-data" *ngIf="!v.profissional">—</span>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Empresa -->
+        <ng-container matColumnDef="empresa">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">business</mat-icon>
+              EMPRESA
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let v">
+            <div class="empresa-cell" *ngIf="v.empresa">
+              <div class="empresa-avatar">
+                {{ v.empresa.nome?.charAt(0)?.toUpperCase() || '?' }}
+              </div>
+              <span class="empresa-name">{{ v.empresa.nome }}</span>
+            </div>
+            <span class="no-data" *ngIf="!v.empresa">—</span>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Localização -->
+        <ng-container matColumnDef="localizacao">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">location_on</mat-icon>
+              LOCALIZAÇÃO
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let v">
+            <div class="localizacao-cell">
+              <mat-icon class="loc-icon">place</mat-icon>
+              <span>{{ v.localizacaoFrete }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Valor Frete -->
+        <ng-container matColumnDef="valorFrete">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">attach_money</mat-icon>
+              VALOR FRETE
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let v">
+            <span class="valor-frete">{{ formatCurrency(v.valorFrete) }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Status -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">flag</mat-icon>
+              STATUS
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let v">
+            <div class="status-chip" [ngClass]="getStatusClass(v.status)">
+              <div class="status-dot"></div>
+              <span>{{ getStatusLabel(v.status) }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Data Início -->
+        <ng-container matColumnDef="dataInicio">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">event</mat-icon>
+              DATA INÍCIO
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let v">
+            <span class="data-badge">{{ formatDate(v.dataInicio) }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Data Fim -->
+        <ng-container matColumnDef="dataFim">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">event_available</mat-icon>
+              DATA FIM
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let v">
+            <span class="data-badge" *ngIf="v.dataFim">{{ formatDate(v.dataFim) }}</span>
+            <span class="no-data" *ngIf="!v.dataFim">—</span>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Ações -->
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">settings</mat-icon>
+              AÇÕES
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let v">
+            <div class="actions-cell">
+              <button class="action-btn edit-btn" (click)="openEditDialog(v)" matTooltip="Editar viagem">
+                <mat-icon>edit</mat-icon>
+                <span>Editar</span>
+              </button>
+              <button class="action-btn despesas-btn" (click)="openDespesasDialog(v)" matTooltip="Ver despesas e receita">
+                <mat-icon>receipt_long</mat-icon>
+                <span>Despesas</span>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="data-row"></tr>
+      </table>
+    </div>
+
+    <!-- No Filter Results -->
+    <div class="empty-state filter-empty" *ngIf="filteredViagens.length === 0 && viagens.length > 0">
+      <div class="empty-icon-wrapper">
+        <mat-icon class="empty-icon">search_off</mat-icon>
+        <div class="empty-ring"></div>
+      </div>
+      <p class="empty-title">Nenhum resultado encontrado</p>
+      <p class="empty-subtitle">Tente ajustar os filtros de busca</p>
+      <button class="create-btn-secondary" (click)="clearFilters()">
+        <mat-icon>clear</mat-icon>
+        <span>Limpar Filtros</span>
+      </button>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="filteredViagens.length === 0 && viagens.length === 0">
+      <div class="empty-icon-wrapper">
+        <mat-icon class="empty-icon">route</mat-icon>
+        <div class="empty-ring"></div>
+      </div>
+      <p class="empty-title">Nenhuma viagem cadastrada</p>
+      <p class="empty-subtitle">Registre a primeira viagem do sistema</p>
+      <button class="create-btn-secondary" (click)="openCreateDialog()">
+        <mat-icon>add_circle</mat-icon>
+        <span>Cadastrar Viagem</span>
+      </button>
+    </div>
+
+    <div class="panel-corner"></div>
+  </div>
+</div>

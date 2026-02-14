@@ -1,0 +1,415 @@
+/* ═══════════════════════════════════════════ */
+/*         CONFIGURAÇÕES – Neon-Noir          */
+/* ═══════════════════════════════════════════ */
+
+:host {
+  display: block;
+  padding: 24px;
+  min-height: 100%;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Page Header ────────────────────────── */
+.page-header {
+  margin-bottom: 28px;
+}
+
+.page-title-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.title-accent {
+  width: 4px;
+  height: 42px;
+  background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.35);
+}
+
+.page-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fbbf24;
+  letter-spacing: 2px;
+  margin: 0;
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+}
+
+.page-subtitle {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 2px 0 0;
+  letter-spacing: 0.5px;
+}
+
+/* ── Settings Grid ──────────────────────── */
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 1100px;
+}
+
+@media (max-width: 900px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Panel ──────────────────────────────── */
+.settings-panel {
+  background: linear-gradient(145deg, rgba(26, 31, 46, 0.95), rgba(15, 20, 29, 0.98));
+  border: 1px solid rgba(251, 191, 36, 0.12);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  transition: border-color 0.3s ease;
+}
+
+.settings-panel:hover {
+  border-color: rgba(251, 191, 36, 0.28);
+}
+
+.panel-scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.5), transparent);
+  animation: scanLine 3s ease-in-out infinite;
+}
+
+@keyframes scanLine {
+  0%, 100% { opacity: 0.3; }
+  50%      { opacity: 1; }
+}
+
+.panel-corner {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  border-right: 2px solid rgba(251, 191, 36, 0.2);
+  border-bottom: 2px solid rgba(251, 191, 36, 0.2);
+  border-radius: 0 0 8px 0;
+}
+
+/* ── Panel Header ───────────────────────── */
+.panel-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid rgba(251, 191, 36, 0.08);
+}
+
+.panel-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.panel-icon {
+  color: #fbbf24;
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+  filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.4));
+}
+
+.panel-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  letter-spacing: 1.5px;
+  margin: 0;
+}
+
+.panel-subtitle {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 2px 0 0;
+}
+
+/* ── Panel Body ─────────────────────────── */
+.panel-body {
+  padding: 24px;
+}
+
+/* ── Avatar Section ─────────────────────── */
+.avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding: 16px;
+  background: rgba(251, 191, 36, 0.04);
+  border: 1px solid rgba(251, 191, 36, 0.08);
+  border-radius: 8px;
+}
+
+.avatar-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.1));
+  border: 2px solid rgba(251, 191, 36, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fbbf24;
+  text-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
+  flex-shrink: 0;
+}
+
+.avatar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.avatar-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.avatar-email {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Form Group ─────────────────────────── */
+.form-group {
+  margin-bottom: 22px;
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: rgba(251, 191, 36, 0.7);
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+.label-icon {
+  font-size: 15px !important;
+  width: 15px !important;
+  height: 15px !important;
+  color: rgba(251, 191, 36, 0.5);
+}
+
+/* ── Input ──────────────────────────────── */
+.input-wrapper {
+  position: relative;
+}
+
+.neon-input {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(15, 20, 29, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: #e2e8f0;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.25s ease;
+  box-sizing: border-box;
+}
+
+.neon-input::placeholder {
+  color: rgba(255, 255, 255, 0.22);
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.neon-input:focus {
+  border-color: rgba(251, 191, 36, 0.45);
+  box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.08), 0 0 16px rgba(251, 191, 36, 0.06);
+}
+
+.input-border {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.neon-input:focus ~ .input-border {
+  width: 100%;
+}
+
+/* ── Password Input ─────────────────────── */
+.password-wrapper .neon-input {
+  padding-right: 44px;
+}
+
+.toggle-visibility {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.toggle-visibility mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: rgba(255, 255, 255, 0.3);
+  transition: color 0.2s ease;
+}
+
+.toggle-visibility:hover mat-icon {
+  color: rgba(251, 191, 36, 0.7);
+}
+
+/* ── Password Strength ──────────────────── */
+.password-strength {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.strength-bar {
+  flex: 1;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.strength-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: all 0.4s ease;
+}
+
+.strength-fill.weak   { background: #ef4444; }
+.strength-fill.medium { background: #f59e0b; }
+.strength-fill.strong { background: #22c55e; }
+
+.strength-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+}
+
+.strength-label.weak   { color: #ef4444; }
+.strength-label.medium { color: #f59e0b; }
+.strength-label.strong { color: #22c55e; }
+
+/* ── Password Match ─────────────────────── */
+.password-match {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+}
+
+.match-icon {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.match   { color: #22c55e; }
+.mismatch { color: #ef4444; }
+
+/* ── Panel Footer / Save Button ─────────── */
+.panel-footer {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.save-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  color: #0f1419;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+}
+
+.save-btn mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.save-btn:hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.35);
+  transform: translateY(-1px);
+}
+
+.save-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.save-btn.saving {
+  pointer-events: none;
+}
+
+.save-spinner {
+  --mdc-circular-progress-active-indicator-color: #0f1419;
+}
+
+/* mat-spinner inside button – override stroke color */
+.save-btn ::ng-deep .mdc-circular-progress__indeterminate-circle-graphic {
+  stroke: #0f1419 !important;
+}

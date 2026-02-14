@@ -1,0 +1,136 @@
+<div class="dialog-shell">
+  <div class="dialog-scan-line"></div>
+
+  <!-- Header -->
+  <div class="dialog-header">
+    <div class="header-title-group">
+      <div class="header-accent"></div>
+      <div>
+        <h2 class="dialog-title">{{ dialogTitle }}</h2>
+        <p class="dialog-subtitle">{{ dialogSubtitle }}</p>
+      </div>
+    </div>
+    <button class="close-btn" (click)="cancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Form -->
+  <div class="dialog-body">
+    <div class="form-group">
+      <label class="field-label">
+        <mat-icon class="label-icon">directions_car</mat-icon>
+        MARCA DO VEÍCULO
+      </label>
+      <div class="input-wrapper">
+        <input
+          type="text"
+          class="neon-input"
+          [(ngModel)]="marca"
+          placeholder="Ex: Volvo FH 540"
+          autocomplete="off"
+        />
+        <div class="input-border"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="field-label">
+        <mat-icon class="label-icon">badge</mat-icon>
+        PLACA
+      </label>
+      <div class="input-wrapper">
+        <input
+          type="text"
+          class="neon-input"
+          [(ngModel)]="placa"
+          placeholder="Ex: ABC-1D23"
+          autocomplete="off"
+        />
+        <div class="input-border"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="field-label">
+        <mat-icon class="label-icon">calendar_today</mat-icon>
+        ANO
+      </label>
+      <div class="input-wrapper">
+        <input
+          type="number"
+          class="neon-input"
+          [(ngModel)]="ano"
+          placeholder="Ex: 2024"
+          autocomplete="off"
+        />
+        <div class="input-border"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="field-label">
+        <mat-icon class="label-icon">person</mat-icon>
+        MOTORISTA VINCULADO
+      </label>
+      <div class="select-wrapper" *ngIf="!isLoadingProfissionais">
+        <select
+          class="neon-select"
+          [(ngModel)]="selectedProfissionalId"
+        >
+          <option [ngValue]="null">— Nenhum motorista —</option>
+          <option *ngFor="let p of profissionais" [ngValue]="p.id">
+            {{ p.nome }}
+          </option>
+        </select>
+        <mat-icon class="select-arrow">expand_more</mat-icon>
+      </div>
+      <div class="loading-profissionais" *ngIf="isLoadingProfissionais">
+        <mat-spinner diameter="18" class="profissional-spinner"></mat-spinner>
+        <span class="loading-label">Carregando motoristas...</span>
+      </div>
+    </div>
+
+    <div class="form-group status-group">
+      <label class="field-label">
+        <mat-icon class="label-icon">toggle_on</mat-icon>
+        STATUS
+      </label>
+      <div class="status-toggle">
+        <mat-slide-toggle
+          [(ngModel)]="status"
+          [color]="'primary'"
+          class="neon-toggle"
+        ></mat-slide-toggle>
+        <span class="status-label" [class.active]="status" [class.inactive]="!status">
+          {{ status ? 'ATIVO' : 'INATIVO' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Error message -->
+    <div class="error-banner" *ngIf="errorMessage">
+      <mat-icon class="error-banner-icon">error_outline</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="dialog-footer">
+    <button class="cancel-btn" (click)="cancel()" [disabled]="isSaving">
+      <span>CANCELAR</span>
+    </button>
+    <button
+      class="save-btn"
+      (click)="save()"
+      [disabled]="!isFormValid || isSaving"
+      [class.saving]="isSaving"
+    >
+      <mat-spinner *ngIf="isSaving" diameter="18" class="save-spinner"></mat-spinner>
+      <mat-icon *ngIf="!isSaving">check</mat-icon>
+      <span>{{ isSaving ? 'SALVANDO...' : actionLabel }}</span>
+    </button>
+  </div>
+
+  <div class="dialog-corner"></div>
+</div>

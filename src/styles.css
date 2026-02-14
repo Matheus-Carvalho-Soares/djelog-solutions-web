@@ -1,8 +1,243 @@
+/* DJELOG - INDUSTRIAL NEON-NOIR THEME */
+
+/* Google Fonts - Tipografia Ousada e Industrial */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 html, body {
   height: 100%;
 }
 
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0a0e1a;
+  color: #ffffff;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* GLOBAL VARIABLES */
+:root {
+  /* Industrial Neon-Noir Color Palette */
+  --color-asphalt-dark: #0a0e1a;
+  --color-asphalt: #0f1419;
+  --color-asphalt-light: #1a1f2e;
+  
+  --color-amber: #fbbf24;
+  --color-amber-dark: #f59e0b;
+  --color-amber-darker: #d97706;
+  
+  --color-neon-green: #10b981;
+  --color-neon-red: #ef4444;
+  --color-neon-blue: #3b82f6;
+  
+  --color-white: #ffffff;
+  --color-white-80: rgba(255, 255, 255, 0.8);
+  --color-white-60: rgba(255, 255, 255, 0.6);
+  --color-white-40: rgba(255, 255, 255, 0.4);
+  
+  /* Typography */
+  --font-display: 'Orbitron', monospace;
+  --font-heading: 'Rajdhani', monospace;
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  
+  /* Shadows */
+  --shadow-neon: 0 0 20px rgba(251, 191, 36, 0.3);
+  --shadow-deep: 0 10px 40px rgba(0, 0, 0, 0.6);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* MATERIAL ANGULAR CUSTOMIZATION */
+.mat-mdc-form-field {
+  --mdc-outlined-text-field-label-text-color: rgba(251, 191, 36, 0.7);
+  --mdc-outlined-text-field-focus-label-text-color: #fbbf24;
+  --mdc-outlined-text-field-hover-outline-color: rgba(251, 191, 36, 0.4);
+  --mdc-outlined-text-field-focus-outline-color: #fbbf24;
+  --mdc-outlined-text-field-outline-color: rgba(251, 191, 36, 0.2);
+  --mat-select-trigger-text-color: #ffffff;
+}
+
+.mat-mdc-select-panel {
+  background: #1a1f2e !important;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 2px;
+}
+
+.mat-mdc-option {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-family: 'Rajdhani', monospace !important;
+  letter-spacing: 1px;
+}
+
+.mat-mdc-option:hover {
+  background: rgba(251, 191, 36, 0.1) !important;
+}
+
+.mat-mdc-option.mdc-list-item--selected {
+  background: rgba(251, 191, 36, 0.15) !important;
+  color: #fbbf24 !important;
+}
+
+.mat-mdc-button,
+.mat-mdc-raised-button {
+  font-family: 'Rajdhani', monospace !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+}
+
+.mat-mdc-icon-button {
+  transition: all 0.3s ease;
+}
+
+/* Mat list item centering for sidebar navigation */
+.nav-item.mat-mdc-list-item .mdc-list-item__content {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.nav-item.mat-mdc-list-item .mat-mdc-list-item-unscoped-content {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+.mat-mdc-icon-button:hover {
+  transform: scale(1.05);
+}
+
+/* SCROLLBAR CUSTOMIZATION */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 20, 25, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(251, 191, 36, 0.3);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(251, 191, 36, 0.5);
+}
+
+/* UTILITY CLASSES */
+.text-amber {
+  color: var(--color-amber);
+}
+
+.text-neon-green {
+  color: var(--color-neon-green);
+}
+
+.text-neon-red {
+  color: var(--color-neon-red);
+}
+
+.bg-asphalt {
+  background: var(--color-asphalt);
+}
+
+.bg-asphalt-light {
+  background: var(--color-asphalt-light);
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.6);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.slide-in-up {
+  animation: slideInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide-in-right {
+  animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* DIALOG OVERLAY */
+.cdk-overlay-dark-backdrop {
+  background: rgba(5, 7, 15, 0.85) !important;
+  backdrop-filter: blur(4px);
+}
+
+.neon-dialog .mat-mdc-dialog-container {
+  padding: 0 !important;
+  background: transparent !important;
+  border-radius: 4px;
+  overflow: visible;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(251, 191, 36, 0.08) !important;
+}
+
+.neon-dialog .mdc-dialog__surface {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 4px !important;
+  overflow: hidden;
+}
+
+/* SNACKBAR */
+.neon-snackbar {
+  --mdc-snackbar-container-color: #1a1f2e !important;
+  --mdc-snackbar-supporting-text-color: #ffffff !important;
+  --mat-snack-bar-button-color: #fbbf24 !important;
+  border: 1px solid rgba(251, 191, 36, 0.3) !important;
 }

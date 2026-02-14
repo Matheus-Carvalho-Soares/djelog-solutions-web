@@ -1,0 +1,78 @@
+<div class="dialog-shell">
+  <div class="dialog-scan-line"></div>
+
+  <!-- Header -->
+  <div class="dialog-header">
+    <div class="header-title-group">
+      <div class="header-accent"></div>
+      <div>
+        <h2 class="dialog-title">{{ dialogTitle }}</h2>
+        <p class="dialog-subtitle">{{ dialogSubtitle }}</p>
+      </div>
+    </div>
+    <button class="close-btn" (click)="cancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Form -->
+  <div class="dialog-body">
+    <div class="form-group">
+      <label class="field-label">
+        <mat-icon class="label-icon">business</mat-icon>
+        NOME DA EMPRESA
+      </label>
+      <div class="input-wrapper">
+        <input
+          type="text"
+          class="neon-input"
+          [(ngModel)]="nome"
+          placeholder="Nome da empresa"
+          autocomplete="off"
+        />
+        <div class="input-border"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="field-label">
+        <mat-icon class="label-icon">description</mat-icon>
+        DESCRIÇÃO
+      </label>
+      <div class="input-wrapper">
+        <textarea
+          class="neon-input neon-textarea"
+          [(ngModel)]="descricao"
+          placeholder="Descrição da empresa (opcional)"
+          rows="4"
+        ></textarea>
+        <div class="input-border"></div>
+      </div>
+    </div>
+
+    <!-- Error message -->
+    <div class="error-banner" *ngIf="errorMessage">
+      <mat-icon class="error-banner-icon">error_outline</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="dialog-footer">
+    <button class="cancel-btn" (click)="cancel()" [disabled]="isSaving">
+      <span>CANCELAR</span>
+    </button>
+    <button
+      class="save-btn"
+      (click)="save()"
+      [disabled]="!isFormValid || isSaving"
+      [class.saving]="isSaving"
+    >
+      <mat-spinner *ngIf="isSaving" diameter="18" class="save-spinner"></mat-spinner>
+      <mat-icon *ngIf="!isSaving">check</mat-icon>
+      <span>{{ isSaving ? 'SALVANDO...' : actionLabel }}</span>
+    </button>
+  </div>
+
+  <div class="dialog-corner"></div>
+</div>

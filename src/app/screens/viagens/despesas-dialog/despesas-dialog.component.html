@@ -1,0 +1,124 @@
+<div class="dialog-shell">
+  <div class="dialog-scan-line"></div>
+
+  <!-- Header -->
+  <div class="dialog-header">
+    <div class="header-title-group">
+      <div class="header-accent"></div>
+      <div>
+        <h2 class="dialog-title">DESPESAS</h2>
+        <p class="dialog-subtitle">Resumo financeiro da viagem</p>
+      </div>
+    </div>
+    <button class="close-btn" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Info Bar -->
+  <div class="info-bar">
+    <div class="info-item">
+      <mat-icon class="info-icon">location_on</mat-icon>
+      <span>{{ viagem.localizacaoFrete }}</span>
+    </div>
+    <div class="info-item" *ngIf="viagem.profissional?.nome">
+      <mat-icon class="info-icon">person</mat-icon>
+      <span>{{ viagem.profissional?.nome }}</span>
+    </div>
+  </div>
+
+  <!-- Financial Breakdown -->
+  <div class="dialog-body">
+    <!-- Receita -->
+    <div class="finance-row receita">
+      <div class="row-left">
+        <div class="row-icon-wrapper receita-icon">
+          <mat-icon>trending_up</mat-icon>
+        </div>
+        <div class="row-info">
+          <span class="row-label">VALOR DO FRETE</span>
+          <span class="row-sublabel">Receita bruta</span>
+        </div>
+      </div>
+      <span class="row-value receita-value">{{ formatCurrency(viagem.valorFrete) }}</span>
+    </div>
+
+    <!-- Deduções -->
+    <div class="deductions-header">
+      <mat-icon>remove_circle_outline</mat-icon>
+      <span>DEDUÇÕES</span>
+    </div>
+
+    <div class="finance-row deduction">
+      <div class="row-left">
+        <div class="row-icon-wrapper deduction-icon">
+          <mat-icon>percent</mat-icon>
+        </div>
+        <div class="row-info">
+          <span class="row-label">COMISSÃO ({{ viagem.comissao || 0 }}%)</span>
+          <span class="row-sublabel">Comissão do motorista</span>
+        </div>
+      </div>
+      <span class="row-value deduction-value">- {{ formatCurrency(comissaoValor) }}</span>
+    </div>
+
+    <div class="finance-row deduction">
+      <div class="row-left">
+        <div class="row-icon-wrapper deduction-icon">
+          <mat-icon>local_gas_station</mat-icon>
+        </div>
+        <div class="row-info">
+          <span class="row-label">ABASTECIMENTO</span>
+          <span class="row-sublabel">Combustível</span>
+        </div>
+      </div>
+      <span class="row-value deduction-value">- {{ formatCurrency(viagem.abastecimento) }}</span>
+    </div>
+
+    <div class="finance-row deduction">
+      <div class="row-left">
+        <div class="row-icon-wrapper deduction-icon">
+          <mat-icon>money_off</mat-icon>
+        </div>
+        <div class="row-info">
+          <span class="row-label">DESPESAS</span>
+          <span class="row-sublabel">Outros gastos</span>
+        </div>
+      </div>
+      <span class="row-value deduction-value">- {{ formatCurrency(viagem.despesas) }}</span>
+    </div>
+
+    <!-- Divider -->
+    <div class="result-divider">
+      <div class="divider-line"></div>
+      <span class="divider-label">=</span>
+      <div class="divider-line"></div>
+    </div>
+
+    <!-- Lucro Líquido -->
+    <div class="finance-row result" [class.positive]="isPositive" [class.negative]="!isPositive">
+      <div class="row-left">
+        <div class="row-icon-wrapper result-icon" [class.positive-icon]="isPositive" [class.negative-icon]="!isPositive">
+          <mat-icon>{{ isPositive ? 'trending_up' : 'trending_down' }}</mat-icon>
+        </div>
+        <div class="row-info">
+          <span class="row-label result-label">LUCRO LÍQUIDO</span>
+          <span class="row-sublabel">Resultado final</span>
+        </div>
+      </div>
+      <span class="row-value result-value" [class.positive-value]="isPositive" [class.negative-value]="!isPositive">
+        {{ formatCurrency(lucroLiquido) }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="dialog-footer">
+    <button class="close-action-btn" (click)="close()">
+      <mat-icon>check</mat-icon>
+      <span>FECHAR</span>
+    </button>
+  </div>
+
+  <div class="dialog-corner"></div>
+</div>

@@ -1,0 +1,244 @@
+<div class="relatorio-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <a class="back-btn" routerLink="/dashboard/relatorios">
+        <mat-icon>arrow_back</mat-icon>
+      </a>
+      <div class="page-title-group">
+        <div class="title-accent"></div>
+        <div>
+          <h1 class="page-title">FATURAMENTO POR DATA</h1>
+          <p class="page-subtitle">Relatório de faturamento filtrado por período</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Panel -->
+  <div class="filter-panel">
+    <div class="filter-fields">
+      <div class="filter-group">
+        <label class="filter-label">
+          <mat-icon class="filter-label-icon">event</mat-icon>
+          DATA INÍCIO
+        </label>
+        <input type="date" class="filter-input" [(ngModel)]="dataInicio" />
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">
+          <mat-icon class="filter-label-icon">event</mat-icon>
+          DATA FIM
+        </label>
+        <input type="date" class="filter-input" [(ngModel)]="dataFim" />
+      </div>
+
+      <button class="search-btn" (click)="buscar()" [disabled]="!isFormValid || isLoading">
+        <mat-icon>search</mat-icon>
+        <span>Buscar</span>
+      </button>
+
+      <button
+        class="export-btn"
+        (click)="exportarExcel()"
+        [disabled]="dados.length === 0"
+        *ngIf="hasBuscado && dados.length > 0"
+      >
+        <mat-icon>download</mat-icon>
+        <span>Exportar Excel</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <div class="loading-pulse">
+      <div class="pulse-ring"></div>
+      <div class="pulse-ring delay-1"></div>
+      <mat-icon class="loading-icon">bar_chart</mat-icon>
+    </div>
+    <p class="loading-text">Carregando relatório...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-container" *ngIf="!isLoading && hasBuscado && dados.length === 0">
+    <mat-icon class="empty-icon">search_off</mat-icon>
+    <p class="empty-title">Nenhum dado encontrado</p>
+    <p class="empty-subtitle">Tente ajustar o período de busca</p>
+  </div>
+
+  <!-- Totals Summary -->
+  <div class="totals-bar" *ngIf="!isLoading && dados.length > 0">
+    <div class="total-card">
+      <span class="total-label">FRETE TOTAL</span>
+      <span class="total-value green">{{ formatCurrency(totalFrete) }}</span>
+    </div>
+    <div class="total-card">
+      <span class="total-label">COMISSÃO</span>
+      <span class="total-value amber">{{ formatCurrency(totalComissao) }}</span>
+    </div>
+    <div class="total-card">
+      <span class="total-label">ABASTECIMENTO</span>
+      <span class="total-value red">{{ formatCurrency(totalAbastecimento) }}</span>
+    </div>
+    <div class="total-card">
+      <span class="total-label">DESPESAS</span>
+      <span class="total-value red">{{ formatCurrency(totalDespesas) }}</span>
+    </div>
+    <div class="total-card highlight">
+      <span class="total-label">LUCRO LÍQUIDO</span>
+      <span class="total-value" [class.green]="totalLucro >= 0" [class.red]="totalLucro < 0">
+        {{ formatCurrency(totalLucro) }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <div class="table-panel" *ngIf="!isLoading && dados.length > 0">
+    <div class="table-scan-line"></div>
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="dados" class="data-table">
+
+        <ng-container matColumnDef="dataInicio">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">event</mat-icon> INÍCIO
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let row">{{ formatDate(row.dataInicio) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataFim">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">event</mat-icon> FIM
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let row">{{ formatDate(row.dataFim) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">info</mat-icon> STATUS
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <span class="status-chip" [ngClass]="getStatusClass(row.status)">
+              <span class="status-dot"></span>
+              {{ getStatusLabel(row.status) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="profissionalNome">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">person</mat-icon> PROFISSIONAL
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.profissionalNome || '—' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="empresaNome">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">business</mat-icon> EMPRESA
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.empresaNome || '—' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="veiculoMarca">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">directions_car</mat-icon> MARCA
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.veiculoMarca || '—' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="veiculoPlaca">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">pin</mat-icon> PLACA
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <span class="placa-badge">{{ row.veiculoPlaca || '—' }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="localizacaoFrete">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">location_on</mat-icon> LOCALIZAÇÃO
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.localizacaoFrete || '—' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="valorFrete">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">attach_money</mat-icon> FRETE
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let row" class="currency-cell green">
+            {{ formatCurrency(row.valorFrete) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="comissao">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">percent</mat-icon> COMISSÃO
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let row" class="currency-cell amber">
+            {{ formatCurrency(row.comissao) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="abastecimento">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">local_gas_station</mat-icon> ABASTECIMENTO
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let row" class="currency-cell red">
+            {{ formatCurrency(row.abastecimento) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="despesas">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">receipt_long</mat-icon> DESPESAS
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let row" class="currency-cell red">
+            {{ formatCurrency(row.despesas) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lucroLiquido">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">trending_up</mat-icon> LUCRO LÍQUIDO
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let row" class="currency-cell"
+            [class.green]="row.lucroLiquido >= 0"
+            [class.red]="row.lucroLiquido < 0">
+            {{ formatCurrency(row.lucroLiquido) }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="data-row"></tr>
+      </table>
+    </div>
+  </div>
+</div>

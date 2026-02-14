@@ -1,0 +1,31 @@
+<div class="dashboard-content">
+
+  <!-- Loading State -->
+  <div class="dashboard-loading" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p class="loading-text">Carregando dashboard...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="dashboard-error" *ngIf="hasError && !isLoading">
+    <mat-icon class="error-icon">warning_amber</mat-icon>
+    <p class="error-title">Falha ao carregar dados</p>
+    <p class="error-subtitle">Verifique a conexão com o servidor</p>
+    <button class="retry-btn" (click)="loadDashboard()">
+      <mat-icon>refresh</mat-icon>
+      <span>Tentar Novamente</span>
+    </button>
+  </div>
+
+  <!-- Dashboard Content -->
+  <ng-container *ngIf="!isLoading && !hasError">
+    <app-financial-cards *ngIf="financialSummary" [summary]="financialSummary"></app-financial-cards>
+
+    <app-performance-chart *ngIf="monthlyPerformance" [performance]="monthlyPerformance"></app-performance-chart>
+
+    <div class="panel-grid">
+      <app-vehicle-table [vehicles]="vehiclePerformance"></app-vehicle-table>
+      <app-recent-trips [trips]="recentTrips"></app-recent-trips>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,82 @@
+<div class="trips-panel">
+  <div class="panel-header">
+    <div class="header-content">
+      <h3 class="panel-title">VIAGENS RECENTES</h3>
+      <p class="panel-subtitle">Últimas operações registradas</p>
+    </div>
+  </div>
+
+  <div class="trips-list">
+        <div class="trip-item" 
+          *ngFor="let trip of trips; let i = index"
+          [ngClass]="'status-' + getStatusClass(trip.status)"
+          [style.animation-delay.s]="0.5 + (i * 0.08)">
+      
+      <div class="trip-status-bar"></div>
+      
+      <div class="trip-header">
+        <div class="trip-route">
+          <mat-icon class="route-icon">route</mat-icon>
+          <span class="route-text">{{ trip.localizacao }}</span>
+        </div>
+        <span class="trip-status-badge" [ngClass]="'status-' + getStatusClass(trip.status)">
+          {{ getStatusLabel(trip.status) }}
+        </span>
+      </div>
+
+      <div class="trip-details">
+        <div class="detail-row">
+          <span class="detail-label">
+            <mat-icon class="detail-icon">person</mat-icon>
+            Motorista
+          </span>
+          <span class="detail-value">{{ trip.motorista }}</span>
+        </div>
+        
+        <div class="detail-row">
+          <span class="detail-label">
+            <mat-icon class="detail-icon">local_shipping</mat-icon>
+            Veículo
+          </span>
+          <span class="detail-value">{{ trip.veiculo }}</span>
+        </div>
+      </div>
+
+      <div class="trip-financials">
+        <div class="financial-item">
+          <span class="financial-label">FRETE</span>
+          <span class="financial-value revenue">{{ trip.receita | currency:'BRL':'symbol':'1.0-0' }}</span>
+        </div>
+        
+        <div class="financial-separator"></div>
+        
+        <div class="financial-item">
+          <span class="financial-label">DESPESAS</span>
+          <span class="financial-value expense">{{ trip.despesa | currency:'BRL':'symbol':'1.0-0' }}</span>
+        </div>
+        
+        <div class="financial-separator"></div>
+        
+        <div class="financial-item lucro">
+          <span class="financial-label">LUCRO</span>
+          <span class="financial-value profit" [class.negative]="getLucro(trip) < 0">
+            {{ getLucro(trip) | currency:'BRL':'symbol':'1.0-0' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="trip-date">
+        <mat-icon class="date-icon">event</mat-icon>
+        <span>{{ trip.inicio | date:'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+    </div>
+
+    <div class="no-trips" *ngIf="trips.length === 0">
+      <mat-icon>flight_takeoff</mat-icon>
+      <p>Nenhuma viagem registrada</p>
+      <span class="no-trips-subtitle">Adicione uma nova viagem para começar</span>
+    </div>
+  </div>
+  
+  <div class="panel-corner"></div>
+</div>

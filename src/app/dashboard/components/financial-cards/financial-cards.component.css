@@ -1,0 +1,240 @@
+/* INDUSTRIAL NEON-NOIR FINANCIAL CARDS */
+
+.financial-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+  animation: cardsReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cardsReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.finance-card {
+  position: relative;
+  background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  border-radius: 4px;
+  padding: 24px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+}
+
+.finance-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.03) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.finance-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(251, 191, 36, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(251, 191, 36, 0.15);
+}
+
+.finance-card:hover::before {
+  opacity: 1;
+}
+
+.card-corner {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(135deg, transparent 0%, #fbbf24 100%);
+  opacity: 0.6;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.card-icon {
+  color: #fbbf24;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.5));
+}
+
+.card-label {
+  font-family: 'Rajdhani', 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  color: rgba(251, 191, 36, 0.8);
+  text-transform: uppercase;
+}
+
+.card-body {
+  position: relative;
+  z-index: 1;
+}
+
+.card-value {
+  display: block;
+  font-family: 'Orbitron', 'Rajdhani', monospace;
+  font-size: 36px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 20px rgba(251, 191, 36, 0.3);
+}
+
+.trips-count {
+  font-size: 48px;
+  color: #fbbf24;
+}
+
+.profit-indicator {
+  display: inline-block;
+  font-family: 'Rajdhani', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.15);
+  padding: 4px 12px;
+  border-radius: 2px;
+  border-left: 2px solid #10b981;
+  letter-spacing: 1px;
+}
+
+.profit-indicator.negative {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+  border-left-color: #ef4444;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  color: rgba(239, 68, 68, 0.9);
+  margin-top: 8px;
+}
+
+.meta-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+/* GLOW EFFECTS */
+.card-glow {
+  position: absolute;
+  bottom: -40%;
+  right: -20%;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  filter: blur(50px);
+  opacity: 0.15;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.finance-card:hover .card-glow {
+  opacity: 0.25;
+}
+
+.revenue-glow {
+  background: radial-gradient(circle, #fbbf24 0%, transparent 70%);
+}
+
+.expense-glow {
+  background: radial-gradient(circle, #f59e0b 0%, transparent 70%);
+}
+
+.profit-glow {
+  background: radial-gradient(circle, #10b981 0%, transparent 70%);
+}
+
+.profit-glow.negative {
+  background: radial-gradient(circle, #ef4444 0%, transparent 70%);
+}
+
+.trips-glow {
+  background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+}
+
+/* CARD VARIANTS */
+.profit-card.negative {
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.profit-card.negative:hover {
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(239, 68, 68, 0.15);
+}
+
+.profit-card.negative .card-icon {
+  color: #ef4444;
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.5));
+}
+
+.profit-card.negative .card-value {
+  color: #ef4444;
+  text-shadow: 0 2px 20px rgba(239, 68, 68, 0.3);
+}
+
+/* RESPONSIVE */
+@media (max-width: 1400px) {
+  .financial-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .financial-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .card-value {
+    font-size: 32px;
+  }
+}
+
+.metric-card.expense .card-icon {
+  background: var(--ink-80);
+}
+
+.metric-card.profit.positive .card-icon,
+.metric-card.active .card-icon {
+  background: var(--emerald-80);
+}
+
+.metric-card.profit.negative .card-icon {
+  background: var(--crimson-80);
+}
+
+.metric-card.profit.positive .card-value {
+  color: var(--emerald-80);
+}
+
+.metric-card.profit.negative .card-value {
+  color: var(--crimson-80);
+}

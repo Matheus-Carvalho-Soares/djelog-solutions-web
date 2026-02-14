@@ -1,0 +1,60 @@
+<div class="financial-cards-grid">
+  <!-- RECEITA TOTAL -->
+  <div class="finance-card revenue-card">
+    <div class="card-header">
+      <mat-icon class="card-icon">trending_up</mat-icon>
+      <span class="card-label">RECEITA TOTAL</span>
+    </div>
+    <div class="card-body">
+      <span class="card-value">{{ summary.totalReceita | currency: 'BRL':'symbol':'1.0-0' }}</span>
+      <div class="card-glow revenue-glow"></div>
+    </div>
+    <div class="card-corner"></div>
+  </div>
+
+  <!-- DESPESA TOTAL -->
+  <div class="finance-card expense-card">
+    <div class="card-header">
+      <mat-icon class="card-icon">trending_down</mat-icon>
+      <span class="card-label">DESPESA TOTAL</span>
+    </div>
+    <div class="card-body">
+      <span class="card-value">{{ summary.totalDespesa | currency: 'BRL':'symbol':'1.0-0' }}</span>
+      <div class="card-glow expense-glow"></div>
+    </div>
+    <div class="card-corner"></div>
+  </div>
+
+  <!-- LUCRO LÍQUIDO -->
+  <div class="finance-card profit-card" [class.negative]="summary.lucroLiquido < 0">
+    <div class="card-header">
+      <mat-icon class="card-icon">{{ summary.lucroLiquido >= 0 ? 'account_balance_wallet' : 'warning' }}</mat-icon>
+      <span class="card-label">LUCRO LÍQUIDO</span>
+    </div>
+    <div class="card-body">
+      <span class="card-value">{{ summary.lucroLiquido | currency: 'BRL':'symbol':'1.0-0' }}</span>
+      <div class="profit-indicator" [class.negative]="summary.lucroLiquido < 0">
+        {{ getPercentageProfit() }}%
+      </div>
+      <div class="card-glow profit-glow" [class.negative]="summary.lucroLiquido < 0"></div>
+    </div>
+    <div class="card-corner"></div>
+  </div>
+
+  <!-- VIAGENS ATIVAS -->
+  <div class="finance-card trips-card">
+    <div class="card-header">
+      <mat-icon class="card-icon">local_shipping</mat-icon>
+      <span class="card-label">VIAGENS ATIVAS</span>
+    </div>
+    <div class="card-body">
+      <span class="card-value trips-count">{{ summary.viagensAtivas }}</span>
+      <span class="card-meta" *ngIf="summary.viagensPrejuizo > 0">
+        <mat-icon class="meta-icon">error_outline</mat-icon>
+        {{ summary.viagensPrejuizo }} com prejuízo
+      </span>
+      <div class="card-glow trips-glow"></div>
+    </div>
+    <div class="card-corner"></div>
+  </div>
+</div>

@@ -9,6 +9,9 @@ export interface LoginResponse {
   success: boolean;
   token?: string;
   message?: string;
+  userId?: string;
+  userName?: string;
+  email?: string;
 }
 
 export interface RegisterResponse {

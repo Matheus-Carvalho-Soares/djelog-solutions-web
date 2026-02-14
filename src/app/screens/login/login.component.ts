@@ -68,14 +68,16 @@ export class LoginComponent {
 
     // Chama o serviço de autenticação
 
-    console.log('Iniciando login com:', { email, password});
     this.authService.login(email, password).subscribe({
       next: (response: LoginResponse) => {
         this.isLoading = false;
         
         if (response.success) {
+          console.log(response);
           sessionStorage.setItem('authToken', response.token || '');
-          sessionStorage.setItem('userEmail', email);
+          sessionStorage.setItem('userId', response.userId || '');
+          sessionStorage.setItem('userEmail', response.email || '');
+          sessionStorage.setItem('userName', response.userName || '');
           this.sucessMessage = response.message || 'Login realizado com sucesso!';
           this.router.navigate(['/dashboard']);
         } else {

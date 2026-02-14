@@ -1,0 +1,236 @@
+<div class="motoristas-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <div class="page-title-group">
+        <div class="title-accent"></div>
+        <div>
+          <h1 class="page-title">MOTORISTAS</h1>
+          <p class="page-subtitle">Gestão de profissionais cadastrados</p>
+        </div>
+      </div>
+      <div class="counter-badge" *ngIf="!isLoading">
+        <mat-icon class="counter-icon">groups</mat-icon>
+        <span class="counter-value">{{ filteredMotoristas.length }}</span>
+        <span class="counter-label">REGISTROS</span>
+      </div>
+    </div>
+
+    <button class="create-btn" (click)="openCreateDialog()">
+      <mat-icon>person_add</mat-icon>
+      <span>Novo Motorista</span>
+      <div class="btn-glow"></div>
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <div class="loading-pulse">
+      <div class="pulse-ring"></div>
+      <div class="pulse-ring delay-1"></div>
+      <div class="pulse-ring delay-2"></div>
+      <mat-icon class="loading-icon">groups</mat-icon>
+    </div>
+    <p class="loading-text">Carregando motoristas...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="hasError && !isLoading">
+    <div class="error-icon-wrapper">
+      <mat-icon class="error-icon">warning_amber</mat-icon>
+    </div>
+    <p class="error-title">Falha ao carregar dados</p>
+    <p class="error-subtitle">Verifique a conexão com o servidor</p>
+    <button class="retry-btn" (click)="loadMotoristas()">
+      <mat-icon>refresh</mat-icon>
+      <span>Tentar Novamente</span>
+    </button>
+  </div>
+
+  <!-- Table Panel -->
+  <div class="table-panel" *ngIf="!isLoading && !hasError">
+    <div class="table-scan-line"></div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar" *ngIf="motoristas.length > 0">
+      <button class="filter-toggle-btn" (click)="toggleFilters()" [class.active]="filtersVisible || hasActiveFilters">
+        <mat-icon>filter_list</mat-icon>
+        <span>Filtros</span>
+        <div class="filter-indicator" *ngIf="hasActiveFilters"></div>
+      </button>
+
+      <div class="filter-fields" [class.visible]="filtersVisible">
+        <div class="filter-group">
+          <label class="filter-label">
+            <mat-icon class="filter-label-icon">badge</mat-icon>
+            NOME
+          </label>
+          <div class="filter-input-wrapper">
+            <input
+              type="text"
+              class="filter-input"
+              [(ngModel)]="filterNome"
+              (ngModelChange)="applyFilters()"
+              placeholder="Buscar por nome..."
+              autocomplete="off"
+            />
+            <mat-icon class="filter-search-icon">search</mat-icon>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">
+            <mat-icon class="filter-label-icon">phone</mat-icon>
+            TELEFONE
+          </label>
+          <div class="filter-input-wrapper">
+            <input
+              type="text"
+              class="filter-input"
+              [(ngModel)]="filterTelefone"
+              (ngModelChange)="applyFilters()"
+              placeholder="Buscar por telefone..."
+              autocomplete="off"
+            />
+            <mat-icon class="filter-search-icon">search</mat-icon>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">
+            <mat-icon class="filter-label-icon">toggle_on</mat-icon>
+            STATUS
+          </label>
+          <div class="filter-select-wrapper">
+            <select
+              class="filter-select"
+              [(ngModel)]="filterStatus"
+              (ngModelChange)="applyFilters()"
+            >
+              <option value="todos">Todos</option>
+              <option value="ativo">Ativo</option>
+              <option value="inativo">Inativo</option>
+            </select>
+            <mat-icon class="filter-select-arrow">expand_more</mat-icon>
+          </div>
+        </div>
+
+        <button class="filter-clear-btn" *ngIf="hasActiveFilters" (click)="clearFilters()">
+          <mat-icon>clear</mat-icon>
+          <span>Limpar</span>
+        </button>
+      </div>
+
+      <div class="filter-results" *ngIf="hasActiveFilters">
+        <span class="results-count">{{ filteredMotoristas.length }}</span>
+        <span class="results-label">de {{ motoristas.length }} registros</span>
+      </div>
+    </div>
+
+    <div class="table-container" *ngIf="motoristas.length > 0">
+      <table mat-table [dataSource]="filteredMotoristas" class="motoristas-table">
+
+        <!-- Coluna Nome -->
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">badge</mat-icon>
+              NOME
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let m">
+            <div class="driver-info">
+              <div class="driver-avatar">
+                {{ m.nome?.charAt(0)?.toUpperCase() || '?' }}
+              </div>
+              <span class="driver-name">{{ m.nome }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Telefone -->
+        <ng-container matColumnDef="telefone">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">phone</mat-icon>
+              TELEFONE
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let m">
+            <div class="phone-cell">
+              <mat-icon class="phone-icon">call</mat-icon>
+              <span class="phone-value">{{ m.telefone || '—' }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Status -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">toggle_on</mat-icon>
+              STATUS
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let m">
+            <div class="status-chip" [class.active]="m.status" [class.inactive]="!m.status">
+              <div class="status-dot"></div>
+              <span>{{ getStatusLabel(m.status) }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Acoes -->
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">edit</mat-icon>
+              ACOES
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let m">
+            <div class="actions-cell">
+              <button class="action-btn" (click)="openEditDialog(m)" matTooltip="Editar">
+                <mat-icon>edit</mat-icon>
+                <span>Editar</span>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="data-row"></tr>
+      </table>
+    </div>
+
+    <!-- No Filter Results -->
+    <div class="empty-state filter-empty" *ngIf="filteredMotoristas.length === 0 && motoristas.length > 0">
+      <div class="empty-icon-wrapper">
+        <mat-icon class="empty-icon">search_off</mat-icon>
+        <div class="empty-ring"></div>
+      </div>
+      <p class="empty-title">Nenhum resultado encontrado</p>
+      <p class="empty-subtitle">Tente ajustar os filtros de busca</p>
+      <button class="create-btn-secondary" (click)="clearFilters()">
+        <mat-icon>clear</mat-icon>
+        <span>Limpar Filtros</span>
+      </button>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="filteredMotoristas.length === 0 && motoristas.length === 0">
+      <div class="empty-icon-wrapper">
+        <mat-icon class="empty-icon">person_off</mat-icon>
+        <div class="empty-ring"></div>
+      </div>
+      <p class="empty-title">Nenhum motorista cadastrado</p>
+      <p class="empty-subtitle">Adicione seu primeiro profissional ao sistema</p>
+      <button class="create-btn-secondary" (click)="openCreateDialog()">
+        <mat-icon>person_add</mat-icon>
+        <span>Cadastrar Motorista</span>
+      </button>
+    </div>
+
+    <div class="panel-corner"></div>
+  </div>
+</div>

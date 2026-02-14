@@ -1,0 +1,404 @@
+/* INDUSTRIAL NEON-NOIR RECENT TRIPS */
+
+.trips-panel {
+  position: relative;
+  background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  border-radius: 4px;
+  padding: 28px;
+  overflow: hidden;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+  animation: panelReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+
+@keyframes panelReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.panel-corner {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(135deg, transparent 0%, #10b981 100%);
+  opacity: 0.7;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(251, 191, 36, 0.1);
+}
+
+.header-content {
+  flex: 1;
+}
+
+.panel-title {
+  font-family: 'Orbitron', 'Rajdhani', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  letter-spacing: 1.5px;
+  text-shadow: 0 2px 15px rgba(251, 191, 36, 0.3);
+}
+
+.panel-subtitle {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  color: rgba(251, 191, 36, 0.6);
+  margin: 0;
+}
+
+.header-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 2px;
+  font-family: 'Rajdhani', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: #10b981;
+  letter-spacing: 1.5px;
+}
+
+.badge-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.trips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.trips-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.trips-list::-webkit-scrollbar-track {
+  background: rgba(251, 191, 36, 0.05);
+  border-radius: 3px;
+}
+
+.trips-list::-webkit-scrollbar-thumb {
+  background: rgba(251, 191, 36, 0.3);
+  border-radius: 3px;
+}
+
+.trips-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(251, 191, 36, 0.5);
+}
+
+.trip-item {
+  position: relative;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  border-left: 4px solid;
+  border-radius: 2px;
+  padding: 20px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: tripSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes tripSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.trip-item:hover {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: rgba(251, 191, 36, 0.3);
+  transform: translateX(6px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.trip-item.status-active {
+  border-left-color: #3b82f6;
+}
+
+.trip-item.status-completed {
+  border-left-color: #10b981;
+}
+
+.trip-item.status-cancelled {
+  border-left-color: #ef4444;
+}
+
+.trip-status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  opacity: 0.5;
+}
+
+.trip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 16px;
+}
+
+.trip-route {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.route-icon {
+  color: #fbbf24;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.route-text {
+  font-family: 'Rajdhani', monospace;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.trip-status-badge {
+  font-family: 'Rajdhani', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 2px;
+  letter-spacing: 1.5px;
+  white-space: nowrap;
+}
+
+.trip-status-badge.status-active {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+}
+
+.trip-status-badge.status-completed {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.trip-status-badge.status-cancelled {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.trip-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: rgba(251, 191, 36, 0.03);
+  border-radius: 2px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.detail-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  color: rgba(251, 191, 36, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.detail-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: rgba(251, 191, 36, 0.5);
+}
+
+.detail-value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.trip-financials {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(251, 191, 36, 0.1);
+  border-radius: 2px;
+  margin-bottom: 12px;
+}
+
+.financial-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.financial-item.lucro {
+  padding-left: 20px;
+  border-left: 2px solid rgba(251, 191, 36, 0.2);
+}
+
+.financial-label {
+  font-family: 'Rajdhani', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(251, 191, 36, 0.6);
+  letter-spacing: 1.5px;
+}
+
+.financial-value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.financial-value.revenue {
+  color: #fbbf24;
+}
+
+.financial-value.expense {
+  color: #f59e0b;
+}
+
+.financial-value.profit {
+  color: #10b981;
+}
+
+.financial-value.profit.negative {
+  color: #ef4444;
+}
+
+.financial-separator {
+  width: 1px;
+  height: 40px;
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.trip-date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  padding-top: 8px;
+  border-top: 1px solid rgba(251, 191, 36, 0.05);
+}
+
+.date-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: rgba(251, 191, 36, 0.4);
+}
+
+.no-trips {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.no-trips mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: rgba(251, 191, 36, 0.3);
+  margin-bottom: 16px;
+}
+
+.no-trips p {
+  font-family: 'Rajdhani', monospace;
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+  letter-spacing: 1px;
+}
+
+.no-trips-subtitle {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .trips-panel {
+    padding: 20px;
+  }
+  
+  .panel-title {
+    font-size: 18px;
+  }
+  
+  .trip-item {
+    padding: 16px;
+  }
+  
+  .trip-financials {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .financial-separator {
+    width: 100%;
+    height: 1px;
+  }
+  
+  .financial-item.lucro {
+    padding-left: 0;
+    padding-top: 12px;
+    border-left: none;
+    border-top: 2px solid rgba(251, 191, 36, 0.2);
+  }
+}

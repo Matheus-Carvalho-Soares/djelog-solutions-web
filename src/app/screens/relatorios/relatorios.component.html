@@ -1,0 +1,35 @@
+<div class="relatorios-page">
+  <div class="page-header">
+    <div class="header-left">
+      <div class="page-title-group">
+        <div class="title-accent"></div>
+        <div>
+          <h1 class="page-title">RELATÓRIOS</h1>
+          <p class="page-subtitle">Central de relatórios e exportações</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div
+      class="report-card"
+      *ngFor="let r of relatorios"
+      [class.disabled]="!r.disponivel"
+      [routerLink]="r.disponivel ? r.rota : null"
+    >
+      <div class="card-icon-wrapper">
+        <mat-icon class="card-icon">{{ r.icone }}</mat-icon>
+      </div>
+      <div class="card-content">
+        <h3 class="card-title">{{ r.titulo }}</h3>
+        <p class="card-desc">{{ r.descricao }}</p>
+      </div>
+      <div class="card-arrow">
+        <mat-icon *ngIf="r.disponivel">arrow_forward</mat-icon>
+        <span class="badge-soon" *ngIf="!r.disponivel">EM BREVE</span>
+      </div>
+      <div class="card-glow" *ngIf="r.disponivel"></div>
+    </div>
+  </div>
+</div>

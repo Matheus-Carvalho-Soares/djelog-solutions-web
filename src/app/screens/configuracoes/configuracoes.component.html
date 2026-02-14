@@ -1,0 +1,195 @@
+<div class="settings-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <div class="page-title-group">
+        <div class="title-accent"></div>
+        <div>
+          <h1 class="page-title">CONFIGURAÇÕES</h1>
+          <p class="page-subtitle">Gerencie sua conta e preferências</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-grid">
+    <!-- Profile Section -->
+    <div class="settings-panel">
+      <div class="panel-scan-line"></div>
+
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <mat-icon class="panel-icon">person</mat-icon>
+          <div>
+            <h2 class="panel-title">DADOS PESSOAIS</h2>
+            <p class="panel-subtitle">Atualize seu nome e email</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-body">
+        <!-- Avatar -->
+        <div class="avatar-section">
+          <div class="avatar-circle">
+            {{ nome.charAt(0).toUpperCase() || '?' }}
+          </div>
+          <div class="avatar-info">
+            <span class="avatar-name">{{ nome || 'Usuário' }}</span>
+            <span class="avatar-email">{{ email }}</span>
+          </div>
+        </div>
+
+        <!-- Nome -->
+        <div class="form-group">
+          <label class="field-label">
+            <mat-icon class="label-icon">badge</mat-icon>
+            NOME
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="text"
+              class="neon-input"
+              [(ngModel)]="nome"
+              placeholder="Seu nome completo"
+              autocomplete="name"
+            />
+            <div class="input-border"></div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label class="field-label">
+            <mat-icon class="label-icon">email</mat-icon>
+            EMAIL
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="email"
+              class="neon-input"
+              [(ngModel)]="email"
+              placeholder="seu@email.com"
+              autocomplete="email"
+            />
+            <div class="input-border"></div>
+          </div>
+        </div>
+
+        <div class="panel-footer">
+          <button
+            class="save-btn"
+            (click)="saveProfile()"
+            [disabled]="!isProfileValid || isSaving"
+            [class.saving]="isSaving"
+          >
+            <mat-spinner *ngIf="isSaving" diameter="18" class="save-spinner"></mat-spinner>
+            <mat-icon *ngIf="!isSaving">check</mat-icon>
+            <span>{{ isSaving ? 'SALVANDO...' : 'SALVAR PERFIL' }}</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="panel-corner"></div>
+    </div>
+
+    <!-- Password Section -->
+    <div class="settings-panel">
+      <div class="panel-scan-line"></div>
+
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <mat-icon class="panel-icon">lock</mat-icon>
+          <div>
+            <h2 class="panel-title">ALTERAR SENHA</h2>
+            <p class="panel-subtitle">Defina uma nova senha de acesso</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-body">
+        <!-- Nova Senha -->
+        <div class="form-group">
+          <label class="field-label">
+            <mat-icon class="label-icon">vpn_key</mat-icon>
+            NOVA SENHA
+          </label>
+          <div class="input-wrapper password-wrapper">
+            <input
+              [type]="showNovaSenha ? 'text' : 'password'"
+              class="neon-input"
+              [(ngModel)]="novaSenha"
+              placeholder="Mínimo 6 caracteres"
+              autocomplete="new-password"
+            />
+            <button class="toggle-visibility" (click)="showNovaSenha = !showNovaSenha">
+              <mat-icon>{{ showNovaSenha ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <div class="input-border"></div>
+          </div>
+          <div class="password-strength" *ngIf="novaSenha.length > 0">
+            <div class="strength-bar">
+              <div
+                class="strength-fill"
+                [style.width.%]="novaSenha.length >= 10 ? 100 : novaSenha.length >= 6 ? 60 : 30"
+                [class.weak]="novaSenha.length < 6"
+                [class.medium]="novaSenha.length >= 6 && novaSenha.length < 10"
+                [class.strong]="novaSenha.length >= 10"
+              ></div>
+            </div>
+            <span class="strength-label"
+              [class.weak]="novaSenha.length < 6"
+              [class.medium]="novaSenha.length >= 6 && novaSenha.length < 10"
+              [class.strong]="novaSenha.length >= 10"
+            >
+              {{ novaSenha.length < 6 ? 'Fraca' : novaSenha.length < 10 ? 'Média' : 'Forte' }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Confirmar Senha -->
+        <div class="form-group">
+          <label class="field-label">
+            <mat-icon class="label-icon">lock_outline</mat-icon>
+            CONFIRMAR SENHA
+          </label>
+          <div class="input-wrapper password-wrapper">
+            <input
+              [type]="showConfirmarSenha ? 'text' : 'password'"
+              class="neon-input"
+              [(ngModel)]="confirmarSenha"
+              placeholder="Repita a nova senha"
+              autocomplete="new-password"
+            />
+            <button class="toggle-visibility" (click)="showConfirmarSenha = !showConfirmarSenha">
+              <mat-icon>{{ showConfirmarSenha ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <div class="input-border"></div>
+          </div>
+          <div class="password-match" *ngIf="confirmarSenha.length > 0">
+            <mat-icon class="match-icon" [class.match]="!passwordMismatch" [class.mismatch]="passwordMismatch">
+              {{ passwordMismatch ? 'close' : 'check' }}
+            </mat-icon>
+            <span [class.match]="!passwordMismatch" [class.mismatch]="passwordMismatch">
+              {{ passwordMismatch ? 'Senhas não coincidem' : 'Senhas coincidem' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="panel-footer">
+          <button
+            class="save-btn password-btn"
+            (click)="savePassword()"
+            [disabled]="!isPasswordValid || isSaving"
+            [class.saving]="isSaving"
+          >
+            <mat-spinner *ngIf="isSaving" diameter="18" class="save-spinner"></mat-spinner>
+            <mat-icon *ngIf="!isSaving">lock</mat-icon>
+            <span>{{ isSaving ? 'SALVANDO...' : 'ALTERAR SENHA' }}</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="panel-corner"></div>
+    </div>
+  </div>
+</div>
