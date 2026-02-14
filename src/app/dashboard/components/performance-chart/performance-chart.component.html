@@ -1,8 +1,29 @@
 <div class="performance-panel">
   <div class="panel-header">
     <div class="header-content">
-      <h3 class="panel-title">DESEMPENHO MENSAL</h3>
-      <p class="panel-subtitle">Análise comparativa receita vs despesa — Últimos 6 meses</p>
+      <h3 class="panel-title">{{ viewMode === 'mensal' ? 'DESEMPENHO MENSAL' : 'DESEMPENHO SEMANAL' }}</h3>
+      <p class="panel-subtitle">
+        {{ viewMode === 'mensal'
+          ? 'Análise comparativa receita vs despesa — Últimos 6 meses'
+          : 'Análise comparativa receita vs despesa — Últimas 8 semanas' }}
+      </p>
+    </div>
+    <div class="view-toggle">
+      <mat-button-toggle-group
+        [(ngModel)]="viewMode"
+        (change)="onViewModeChange()"
+        appearance="standard"
+        class="chart-toggle"
+      >
+        <mat-button-toggle value="mensal">
+          <mat-icon>calendar_month</mat-icon>
+          <span class="toggle-label">Mensal</span>
+        </mat-button-toggle>
+        <mat-button-toggle value="semanal">
+          <mat-icon>date_range</mat-icon>
+          <span class="toggle-label">Semanal</span>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
     </div>
   </div>
 

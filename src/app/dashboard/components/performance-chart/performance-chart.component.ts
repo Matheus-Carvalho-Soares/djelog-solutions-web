@@ -1,19 +1,25 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
-import { MonthlyPerformance } from '../../../services/dashboard/dashboard-data.service';
+import { MonthlyPerformance, WeeklyPerformance, ChartViewMode } from '../../../services/dashboard/dashboard-data.service';
 
 @Component({
   selector: 'app-performance-chart',
   standalone: true,
-  imports: [CommonModule, MatCardModule, NgChartsModule],
+  imports: [CommonModule, MatCardModule, MatButtonToggleModule, MatIconModule, FormsModule, NgChartsModule],
   templateUrl: './performance-chart.component.html',
   styleUrl: './performance-chart.component.css'
 })
 export class PerformanceChartComponent implements OnChanges {
   @Input({ required: true }) performance!: MonthlyPerformance;
+  @Input({ required: true }) weeklyPerformance!: WeeklyPerformance;
+
+  viewMode: ChartViewMode = 'mensal';
 
   barChartData: ChartConfiguration<'bar'>['data'] = {
     labels: [],
@@ -102,34 +108,45 @@ export class PerformanceChartComponent implements OnChanges {
   };
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['performance'] && this.performance) {
-      this.barChartData = {
-        labels: this.performance.labels,
-        datasets: [
-          {
-            data: this.performance.receitas,
-            label: 'RECEITA',
-            backgroundColor: 'rgba(251, 191, 36, 0.85)',
-            borderColor: '#fbbf24',
-            borderWidth: 1,
-            borderRadius: 2,
-            hoverBackgroundColor: '#fbbf24',
-            hoverBorderColor: '#ffffff',
-            hoverBorderWidth: 2
-          },
-          {
-            data: this.performance.despesas,
-            label: 'DESPESA',
-            backgroundColor: 'rgba(245, 158, 11, 0.5)',
-            borderColor: '#f59e0b',
-            borderWidth: 1,
-            borderRadius: 2,
-            hoverBackgroundColor: '#f59e0b',
-            hoverBorderColor: '#ffffff',
-            hoverBorderWidth: 2
-          }
-        ]
-      };
+    if (changes['performance'] || changes['weeklyPerformance']) {
+      this.updateChart();
     }
+  }
+
+  onViewModeChange(): void {
+    this.updateChart();
+  }
+
+  private updateChart(): void {
+    const source = this.viewMode === 'semanal' ? this.weeklyPerformance : this.performance;
+    if (!source) return;
+
+    this.barChartData = {
+      labels: source.labels,
+      datasets: [
+        {
+          data: source.receitas,
+          label: 'RECEITA',
+          backgroundColor: 'rgba(251, 191, 36, 0.85)',
+          borderColor: '#fbbf24',
+          borderWidth: 1,
+          borderRadius: 2,
+          hoverBackgroundColor: '#fbbf24',
+          hoverBorderColor: '#ffffff',
+          hoverBorderWidth: 2
+        },
+        {
+          data: source.despesas,
+          label: 'DESPESA',
+          backgroundColor: 'rgba(245, 158, 11, 0.5)',
+          borderColor: '#f59e0b',
+          borderWidth: 1,
+          borderRadius: 2,
+          hoverBackgroundColor: '#f59e0b',
+          hoverBorderColor: '#ffffff',
+          hoverBorderWidth: 2
+        }
+      ]
+    };
   }
 }

@@ -6,7 +6,7 @@
     <p class="loading-text">Carregando dashboard...</p>
   </div>
 
-  <!-- Error State -->
+  <!-- Error State (real connection error) -->
   <div class="dashboard-error" *ngIf="hasError && !isLoading">
     <mat-icon class="error-icon">warning_amber</mat-icon>
     <p class="error-title">Falha ao carregar dados</p>
@@ -17,11 +17,56 @@
     </button>
   </div>
 
+  <!-- Empty State (no trips) -->
+  <div class="dashboard-empty" *ngIf="isEmpty && !isLoading && !hasError">
+    <mat-icon class="empty-icon">route</mat-icon>
+    <p class="empty-title">Nenhuma viagem cadastrada</p>
+    <p class="empty-subtitle">Cadastre sua primeira viagem para visualizar o dashboard com dados financeiros, gráficos e métricas.</p>
+  </div>
+
   <!-- Dashboard Content -->
-  <ng-container *ngIf="!isLoading && !hasError">
+  <ng-container *ngIf="!isLoading && !hasError && !isEmpty">
+    <!-- Filters Section -->
+    <div class="filters-section">
+      <div class="filters-header">
+        <mat-icon class="filters-icon">filter_list</mat-icon>
+        <span class="filters-label">FILTROS</span>
+      </div>
+      <div class="filters-fields">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Veículo</mat-label>
+          <mat-select [(ngModel)]="selectedVeiculoId" (selectionChange)="applyFilters()">
+            <mat-option value="">Todos</mat-option>
+            <mat-option *ngFor="let v of veiculoOptions" [value]="v.id">
+              {{ v.placa ? v.placa + ' — ' + v.marca : v.marca }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Profissional</mat-label>
+          <mat-select [(ngModel)]="selectedProfissionalId" (selectionChange)="applyFilters()">
+            <mat-option value="">Todos</mat-option>
+            <mat-option *ngFor="let p of profissionalOptions" [value]="p.id">
+              {{ p.nome }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button class="clear-filters-btn" *ngIf="hasActiveFilters" (click)="clearFilters()">
+          <mat-icon>clear</mat-icon>
+          <span>Limpar</span>
+        </button>
+      </div>
+    </div>
+
     <app-financial-cards *ngIf="financialSummary" [summary]="financialSummary"></app-financial-cards>
 
-    <app-performance-chart *ngIf="monthlyPerformance" [performance]="monthlyPerformance"></app-performance-chart>
+    <app-performance-chart
+      *ngIf="monthlyPerformance && weeklyPerformance"
+      [performance]="monthlyPerformance"
+      [weeklyPerformance]="weeklyPerformance"
+    ></app-performance-chart>
 
     <div class="panel-grid">
       <app-vehicle-table [vehicles]="vehiclePerformance"></app-vehicle-table>

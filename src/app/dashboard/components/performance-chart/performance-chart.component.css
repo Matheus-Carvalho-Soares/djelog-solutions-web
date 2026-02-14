@@ -48,6 +48,8 @@
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 32px;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .header-content {
@@ -142,4 +144,77 @@
   .chart-container {
     height: 280px;
   }
+
+  .panel-header {
+    flex-direction: column;
+  }
+
+  .toggle-label {
+    display: none;
+  }
+}
+
+/* ====== VIEW TOGGLE ====== */
+
+.view-toggle {
+  flex-shrink: 0;
+}
+
+.chart-toggle {
+  border: 1px solid rgba(251, 191, 36, 0.25) !important;
+  border-radius: 3px !important;
+  overflow: hidden;
+}
+
+:host ::ng-deep .chart-toggle .mat-button-toggle {
+  background: rgba(10, 14, 26, 0.6);
+  border: none !important;
+}
+
+:host ::ng-deep .chart-toggle .mat-button-toggle + .mat-button-toggle {
+  border-left: 1px solid rgba(251, 191, 36, 0.2) !important;
+}
+
+:host ::ng-deep .chart-toggle .mat-button-toggle-checked {
+  background: rgba(251, 191, 36, 0.15) !important;
+}
+
+:host ::ng-deep .chart-toggle .mat-button-toggle-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  height: 36px;
+}
+
+:host ::ng-deep .chart-toggle .mat-button-toggle-label-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 36px;
+  padding: 0 !important;
+}
+
+:host ::ng-deep .chart-toggle mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: rgba(251, 191, 36, 0.6);
+}
+
+:host ::ng-deep .chart-toggle .mat-button-toggle-checked mat-icon {
+  color: #fbbf24;
+}
+
+.toggle-label {
+  font-family: 'Rajdhani', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(251, 191, 36, 0.6);
+}
+
+:host ::ng-deep .chart-toggle .mat-button-toggle-checked .toggle-label {
+  color: #fbbf24;
 }

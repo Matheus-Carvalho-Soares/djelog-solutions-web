@@ -121,3 +121,177 @@
   width: 18px;
   height: 18px;
 }
+
+/* ========== FILTERS SECTION ========== */
+
+.filters-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(15, 20, 25, 0.8) 0%, rgba(26, 31, 46, 0.6) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  border-radius: 4px;
+  flex-wrap: wrap;
+}
+
+.filters-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: fit-content;
+}
+
+.filters-icon {
+  color: rgba(251, 191, 36, 0.7);
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.filters-label {
+  font-family: 'Rajdhani', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(251, 191, 36, 0.7);
+  letter-spacing: 2px;
+}
+
+.filters-fields {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.filter-field {
+  min-width: 200px;
+  max-width: 280px;
+  flex: 1;
+}
+
+/* Angular Material overrides for filter fields */
+:host ::ng-deep .filter-field .mat-mdc-text-field-wrapper {
+  background: rgba(10, 14, 26, 0.6) !important;
+}
+
+:host ::ng-deep .filter-field .mdc-notched-outline__leading,
+:host ::ng-deep .filter-field .mdc-notched-outline__trailing,
+:host ::ng-deep .filter-field .mdc-notched-outline__notch {
+  border-color: rgba(251, 191, 36, 0.25) !important;
+}
+
+:host ::ng-deep .filter-field:hover .mdc-notched-outline__leading,
+:host ::ng-deep .filter-field:hover .mdc-notched-outline__trailing,
+:host ::ng-deep .filter-field:hover .mdc-notched-outline__notch {
+  border-color: rgba(251, 191, 36, 0.45) !important;
+}
+
+:host ::ng-deep .filter-field.mat-focused .mdc-notched-outline__leading,
+:host ::ng-deep .filter-field.mat-focused .mdc-notched-outline__trailing,
+:host ::ng-deep .filter-field.mat-focused .mdc-notched-outline__notch {
+  border-color: #fbbf24 !important;
+}
+
+:host ::ng-deep .filter-field .mat-mdc-select-value-text {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+}
+
+:host ::ng-deep .filter-field .mat-mdc-floating-label {
+  color: rgba(251, 191, 36, 0.6) !important;
+  font-family: 'Rajdhani', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+:host ::ng-deep .filter-field .mat-mdc-select-arrow {
+  color: rgba(251, 191, 36, 0.5) !important;
+}
+
+.clear-filters-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 2px;
+  color: rgba(239, 68, 68, 0.9);
+  font-family: 'Rajdhani', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  height: 40px;
+}
+
+.clear-filters-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.clear-filters-btn mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+/* ========== EMPTY STATE ========== */
+
+.dashboard-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 120px 32px;
+}
+
+.dashboard-empty .empty-icon {
+  font-size: 56px;
+  width: 56px;
+  height: 56px;
+  color: rgba(251, 191, 36, 0.35);
+}
+
+.empty-title {
+  font-family: 'Rajdhani', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.empty-subtitle {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+  text-align: center;
+  max-width: 420px;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .filters-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filters-fields {
+    flex-direction: column;
+  }
+
+  .filter-field {
+    max-width: none;
+    width: 100%;
+  }
+}
