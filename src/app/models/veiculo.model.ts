@@ -5,6 +5,8 @@ export interface Veiculo {
   marca: string;
   placa?: string;
   ano?: number;
+  nome?: string;
+  qtdPeso?: number;
   profissional?: Profissional | null;
   status: boolean;
 }

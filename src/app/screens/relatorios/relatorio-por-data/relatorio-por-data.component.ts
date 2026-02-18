@@ -36,8 +36,8 @@ export class RelatorioPorDataComponent {
 
   displayedColumns: string[] = [
     'dataInicio', 'dataFim', 'status', 'profissionalNome', 'empresaNome',
-    'veiculoMarca', 'veiculoPlaca', 'localizacaoFrete', 'valorFrete',
-    'comissao', 'abastecimento', 'despesas', 'lucroLiquido'
+    'veiculoMarca', 'veiculoPlaca', 'inicioFrete', 'fimFrete', 'valorFrete',
+    'comissao', 'totalDespesas', 'lucroLiquido'
   ];
 
   constructor(
@@ -87,12 +87,8 @@ export class RelatorioPorDataComponent {
     return this.dados.reduce((sum, d) => sum + (d.comissao || 0), 0);
   }
 
-  get totalAbastecimento(): number {
-    return this.dados.reduce((sum, d) => sum + (d.abastecimento || 0), 0);
-  }
-
   get totalDespesas(): number {
-    return this.dados.reduce((sum, d) => sum + (d.despesas || 0), 0);
+    return this.dados.reduce((sum, d) => sum + (d.totalDespesas || 0), 0);
   }
 
   get totalLucro(): number {
@@ -133,8 +129,8 @@ export class RelatorioPorDataComponent {
 
     const headers = [
       'Data Início', 'Data Fim', 'Status', 'Profissional', 'Empresa',
-      'Veículo Marca', 'Veículo Placa', 'Localização Frete',
-      'Valor Frete', 'Comissão', 'Abastecimento', 'Despesas', 'Lucro Líquido'
+      'Veículo Marca', 'Veículo Placa', 'Origem Frete', 'Destino Frete',
+      'Valor Frete', 'Comissão', 'Total Despesas', 'Lucro Líquido'
     ];
 
     const rows = this.dados.map(d => [
@@ -145,19 +141,18 @@ export class RelatorioPorDataComponent {
       d.empresaNome || '',
       d.veiculoMarca || '',
       d.veiculoPlaca || '',
-      d.localizacaoFrete || '',
+      d.inicioFrete || '',
+      d.fimFrete || '',
       d.valorFrete ?? 0,
       d.comissao ?? 0,
-      d.abastecimento ?? 0,
-      d.despesas ?? 0,
+      d.totalDespesas ?? 0,
       d.lucroLiquido ?? 0
     ]);
 
     const totalsRow = [
-      '', '', '', '', '', '', '', 'TOTAIS',
+      '', '', '', '', '', '', '', '', 'TOTAIS',
       this.totalFrete,
       this.totalComissao,
-      this.totalAbastecimento,
       this.totalDespesas,
       this.totalLucro
     ];

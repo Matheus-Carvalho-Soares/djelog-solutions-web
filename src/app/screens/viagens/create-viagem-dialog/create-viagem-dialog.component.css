@@ -501,3 +501,104 @@
 :host ::ng-deep .save-spinner circle {
   stroke: #0f1419 !important;
 }
+
+/* DESPESAS SECTION */
+.despesas-total {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: rgba(251, 191, 36, 0.7);
+  letter-spacing: 0.5px;
+}
+
+.despesas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.despesa-item {
+  padding: 14px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(251, 191, 36, 0.1);
+  border-radius: 2px;
+}
+
+.despesa-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.despesa-fields .form-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.field-label.small {
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+.neon-input.small {
+  padding: 10px 14px;
+  font-size: 13px;
+}
+
+.remove-despesa-btn {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 2px;
+  color: #ef4444;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 2px;
+}
+
+.remove-despesa-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.remove-despesa-btn mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.add-despesa-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px dashed rgba(251, 191, 36, 0.3);
+  border-radius: 2px;
+  color: rgba(251, 191, 36, 0.7);
+  font-family: 'Rajdhani', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.add-despesa-btn:hover {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.5);
+  color: #fbbf24;
+}
+
+.add-despesa-btn mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}

@@ -130,6 +130,24 @@
     <div class="table-container" *ngIf="veiculos.length > 0">
       <table mat-table [dataSource]="filteredVeiculos" class="veiculos-table">
 
+        <!-- Coluna Nome -->
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">local_shipping</mat-icon>
+              NOME
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let v">
+            <div class="vehicle-info">
+              <div class="vehicle-avatar">
+                <mat-icon>local_shipping</mat-icon>
+              </div>
+              <span class="vehicle-name">{{ v.nome || '—' }}</span>
+            </div>
+          </td>
+        </ng-container>
+
         <!-- Coluna Marca -->
         <ng-container matColumnDef="marca">
           <th mat-header-cell *matHeaderCellDef>
@@ -139,12 +157,7 @@
             </div>
           </th>
           <td mat-cell *matCellDef="let v">
-            <div class="vehicle-info">
-              <div class="vehicle-avatar">
-                <mat-icon>local_shipping</mat-icon>
-              </div>
-              <span class="vehicle-name">{{ v.marca }}</span>
-            </div>
+            <span class="vehicle-name">{{ v.marca }}</span>
           </td>
         </ng-container>
 
@@ -171,6 +184,19 @@
           </th>
           <td mat-cell *matCellDef="let v">
             <span class="ano-badge">{{ v.ano || '—' }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Capacidade de Peso -->
+        <ng-container matColumnDef="qtdPeso">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">fitness_center</mat-icon>
+              PESO (KG)
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let v">
+            <span class="ano-badge">{{ v.qtdPeso ? (v.qtdPeso | number:'1.0-0') : '—' }}</span>
           </td>
         </ng-container>
 

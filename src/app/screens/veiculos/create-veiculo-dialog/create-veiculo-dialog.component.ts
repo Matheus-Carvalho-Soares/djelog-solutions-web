@@ -32,8 +32,10 @@ import { Profissional } from '../../../models/profissional.model';
 })
 export class CreateVeiculoDialogComponent implements OnInit {
   marca = '';
+  nome = '';
   placa = '';
   ano: number | null = null;
+  qtdPeso: number | null = null;
   selectedProfissionalId: string | null = null;
   status = true;
   isSaving = false;
@@ -54,8 +56,10 @@ export class CreateVeiculoDialogComponent implements OnInit {
     if (veiculo) {
       this.veiculoId = veiculo.id;
       this.marca = veiculo.marca || '';
+      this.nome = veiculo.nome || '';
       this.placa = veiculo.placa || '';
       this.ano = veiculo.ano ?? null;
+      this.qtdPeso = veiculo.qtdPeso ?? null;
       this.selectedProfissionalId = veiculo.profissional?.id ?? null;
       this.status = veiculo.status ?? true;
     }
@@ -111,8 +115,10 @@ export class CreateVeiculoDialogComponent implements OnInit {
 
     const veiculo: Partial<Veiculo> = {
       marca: this.marca.trim(),
+      nome: this.nome.trim() || undefined,
       placa: this.placa.trim() || undefined,
       ano: this.ano ?? undefined,
+      qtdPeso: this.qtdPeso ?? undefined,
       profissional: selectedProfissional ? { id: selectedProfissional.id } as Profissional : null,
       status: this.status
     };

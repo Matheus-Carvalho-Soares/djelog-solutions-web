@@ -32,7 +32,7 @@ import { CreateVeiculoDialogComponent } from './create-veiculo-dialog/create-vei
 export class VeiculosComponent implements OnInit {
   veiculos: Veiculo[] = [];
   filteredVeiculos: Veiculo[] = [];
-  displayedColumns: string[] = ['marca', 'placa', 'ano', 'profissional', 'status', 'acoes'];
+  displayedColumns: string[] = ['nome', 'marca', 'placa', 'ano', 'qtdPeso', 'profissional', 'status', 'acoes'];
   isLoading = true;
   hasError = false;
 

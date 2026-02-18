@@ -33,12 +33,12 @@ import { DespesasDialogComponent } from './despesas-dialog/despesas-dialog.compo
 export class ViagensComponent implements OnInit {
   viagens: Viagem[] = [];
   filteredViagens: Viagem[] = [];
-  displayedColumns: string[] = ['profissional', 'empresa', 'localizacao', 'valorFrete', 'status', 'dataInicio', 'dataFim', 'acoes'];
+  displayedColumns: string[] = ['profissional', 'empresa', 'frete', 'valorFrete', 'status', 'dataInicio', 'dataFim', 'acoes'];
   isLoading = true;
   hasError = false;
 
   // Filters
-  filterLocalizacao = '';
+  filterFrete = '';
   filterEmpresa = '';
   filterStatus: 'todos' | ViagemStatus = 'todos';
   filtersVisible = false;
@@ -154,9 +154,9 @@ export class ViagensComponent implements OnInit {
   applyFilters(): void {
     let result = [...this.viagens];
 
-    if (this.filterLocalizacao.trim()) {
-      const term = this.filterLocalizacao.trim().toLowerCase();
-      result = result.filter(v => v.localizacaoFrete?.toLowerCase().includes(term));
+    if (this.filterFrete.trim()) {
+      const term = this.filterFrete.trim().toLowerCase();
+      result = result.filter(v => v.inicioFrete?.toLowerCase().includes(term) || v.fimFrete?.toLowerCase().includes(term));
     }
 
     if (this.filterEmpresa.trim()) {
@@ -172,13 +172,13 @@ export class ViagensComponent implements OnInit {
   }
 
   clearFilters(): void {
-    this.filterLocalizacao = '';
+    this.filterFrete = '';
     this.filterEmpresa = '';
     this.filterStatus = 'todos';
     this.applyFilters();
   }
 
   get hasActiveFilters(): boolean {
-    return this.filterLocalizacao.trim() !== '' || this.filterEmpresa.trim() !== '' || this.filterStatus !== 'todos';
+    return this.filterFrete.trim() !== '' || this.filterEmpresa.trim() !== '' || this.filterStatus !== 'todos';
   }
 }

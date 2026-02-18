@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { forkJoin, Observable, map, catchError, of } from 'rxjs';
 import { Veiculo } from '../../models/veiculo.model';
-import { Viagem } from '../../models/viagem.model';
+import { Viagem, Despesa } from '../../models/viagem.model';
 import { ViagemService } from '../viagem/viagem.service';
 import { VeiculoService } from '../veiculo/veiculo.service';
+import { DespesaService } from '../despesa/despesa.service';
 
 export interface FinancialSummary {
   totalReceita: number;
@@ -47,6 +48,8 @@ export interface RecentTrip {
   lucro: number;
   status: string;
   inicio: Date;
+  inicioFrete: string;
+  fimFrete: string;
 }
 
 export interface DashboardData {
@@ -62,21 +65,42 @@ export interface DashboardData {
 @Injectable({ providedIn: 'root' })
 export class DashboardDataService {
 
+  /** Map de viagemId → total de despesas (carregado no loadDashboard) */
+  private despesasPorViagem = new Map<string, number>();
+
   constructor(
     private viagemService: ViagemService,
-    private veiculoService: VeiculoService
+    private veiculoService: VeiculoService,
+    private despesaService: DespesaService
   ) {}
 
   loadDashboard(): Observable<DashboardData> {
     return forkJoin({
       viagens: this.viagemService.findAll().pipe(catchError(() => of([] as Viagem[]))),
-      veiculos: this.veiculoService.findAll().pipe(catchError(() => of([] as Veiculo[])))
+      veiculos: this.veiculoService.findAll().pipe(catchError(() => of([] as Veiculo[]))),
+      despesas: this.despesaService.findAll().pipe(catchError(() => of([] as Despesa[])))
     }).pipe(
-      map(({ viagens, veiculos }) => ({
-        ...this.buildDashboard(viagens, veiculos),
-        allViagens: viagens,
-        allVeiculos: veiculos
-      }))
+      map(({ viagens, veiculos, despesas }) => {
+        // Normalize nulls (204 No Content) to empty arrays
+        const safeViagens = viagens ?? [];
+        const safeVeiculos = veiculos ?? [];
+        const safeDespesas = despesas ?? [];
+
+        // Agrupa despesas por viagem
+        this.despesasPorViagem = new Map<string, number>();
+        safeDespesas.forEach(d => {
+          const vid = d.viagem?.id;
+          if (vid) {
+            this.despesasPorViagem.set(vid, (this.despesasPorViagem.get(vid) || 0) + (d.valor || 0));
+          }
+        });
+
+        return {
+          ...this.buildDashboard(safeViagens, safeVeiculos),
+          allViagens: safeViagens,
+          allVeiculos: safeVeiculos
+        };
+      })
     );
   }
 
@@ -158,7 +182,9 @@ export class DashboardDataService {
         const despesa = this.getTripCost(v);
         return {
           id: v.id ?? '-',
-          localizacao: v.localizacaoFrete,
+          localizacao: `${v.inicioFrete || ''} → ${v.fimFrete || ''}`,
+          inicioFrete: v.inicioFrete || '',
+          fimFrete: v.fimFrete || '',
           motorista: v.profissional?.nome ?? 'Não informado',
           veiculo: v.veiculo?.marca ?? 'Não informado',
           receita,
@@ -172,10 +198,11 @@ export class DashboardDataService {
 
   // --------------- HELPERS ---------------
 
-  /** Comissão é porcentagem: valorFrete × (comissao / 100) */
+  /** Comissão é porcentagem do valorFrete + despesas da viagem */
   private getTripCost(viagem: Viagem): number {
     const comissaoValor = (viagem.valorFrete * (viagem.comissao || 0)) / 100;
-    return comissaoValor + viagem.abastecimento + viagem.despesas;
+    const despesasViagem = this.despesasPorViagem.get(viagem.id || '') || 0;
+    return comissaoValor + despesasViagem;
   }
 
   private getTripProfit(viagem: Viagem): number {
@@ -210,12 +237,16 @@ export class DashboardDataService {
       }, 0);
   }
 
-  /** Returns ISO week number for a given date */
-  private getISOWeek(date: Date): number {
+  /** Returns ISO year and week number for a given date.
+   *  The ISO year may differ from the calendar year at year boundaries
+   *  (e.g. Dec 29 2025 belongs to ISO week 1 of 2026). */
+  private getISOYearWeek(date: Date): { year: number; week: number } {
     const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+    const year = d.getUTCFullYear();
+    const yearStart = new Date(Date.UTC(year, 0, 1));
+    const week = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+    return { year, week };
   }
 
   private getLastEightWeeks(): { labels: string[]; weekKeys: string[] } {
@@ -237,8 +268,8 @@ export class DashboardDataService {
       const fmt = (d: Date) => `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}`;
       labels.push(`${fmt(weekStart)}-${fmt(weekEnd)}`);
 
-      const wk = this.getISOWeek(weekStart);
-      weekKeys.push(`${weekStart.getFullYear()}-W${wk}`);
+      const { year, week } = this.getISOYearWeek(weekStart);
+      weekKeys.push(`${year}-W${week}`);
     }
 
     return { labels, weekKeys };
@@ -248,8 +279,8 @@ export class DashboardDataService {
     return viagens
       .filter(v => {
         const d = new Date(v.dataInicio);
-        const wk = this.getISOWeek(d);
-        return `${d.getFullYear()}-W${wk}` === key;
+        const { year, week } = this.getISOYearWeek(d);
+        return `${year}-W${week}` === key;
       })
       .reduce((acc, v) => {
         const valor = tipo === 'receita' ? v.valorFrete : this.getTripCost(v);

@@ -11,10 +11,18 @@ import { ViagemService } from '../../../services/viagem/viagem.service';
 import { VeiculoService } from '../../../services/veiculo/veiculo.service';
 import { ProfissionalService } from '../../../services/profissional/profissional.service';
 import { EmpresaService } from '../../../services/empresa/empresa.service';
-import { Viagem, ViagemStatus } from '../../../models/viagem.model';
+import { DespesaService } from '../../../services/despesa/despesa.service';
+import { Viagem, ViagemStatus, Despesa } from '../../../models/viagem.model';
 import { Veiculo } from '../../../models/veiculo.model';
 import { Profissional } from '../../../models/profissional.model';
 import { Empresa } from '../../../models/empresa.model';
+
+interface DespesaForm {
+  id?: string;
+  nome: string;
+  descricao: string;
+  valor: number | null;
+}
 
 @Component({
   selector: 'app-create-viagem-dialog',
@@ -37,14 +45,16 @@ export class CreateViagemDialogComponent implements OnInit {
   selectedVeiculoId: string | null = null;
   selectedProfissionalId: string | null = null;
   selectedEmpresaId: string | null = null;
-  localizacaoFrete = '';
+  inicioFrete = '';
+  fimFrete = '';
   valorFrete: number | null = null;
   comissao: number | null = null;
-  abastecimento: number | null = null;
-  despesas: number | null = null;
   dataInicio = '';
   dataFim = '';
   status: ViagemStatus = 'EM_ANDAMENTO';
+
+  // Despesas list
+  despesasList: DespesaForm[] = [];
 
   // Lists
   veiculos: Veiculo[] = [];
@@ -57,6 +67,7 @@ export class CreateViagemDialogComponent implements OnInit {
   errorMessage = '';
 
   private viagemId: string | undefined;
+  private existingDespesaIds: string[] = [];
 
   constructor(
     private dialogRef: MatDialogRef<CreateViagemDialogComponent>,
@@ -64,6 +75,7 @@ export class CreateViagemDialogComponent implements OnInit {
     private veiculoService: VeiculoService,
     private profissionalService: ProfissionalService,
     private empresaService: EmpresaService,
+    private despesaService: DespesaService,
     @Inject(MAT_DIALOG_DATA) public data?: { viagem?: Viagem }
   ) {
     const viagem = data?.viagem as Viagem | undefined;
@@ -72,11 +84,10 @@ export class CreateViagemDialogComponent implements OnInit {
       this.selectedVeiculoId = viagem.veiculo?.id ?? null;
       this.selectedProfissionalId = viagem.profissional?.id ?? null;
       this.selectedEmpresaId = viagem.empresa?.id ?? null;
-      this.localizacaoFrete = viagem.localizacaoFrete || '';
+      this.inicioFrete = viagem.inicioFrete || '';
+      this.fimFrete = viagem.fimFrete || '';
       this.valorFrete = viagem.valorFrete ?? null;
       this.comissao = viagem.comissao ?? null;
-      this.abastecimento = viagem.abastecimento ?? null;
-      this.despesas = viagem.despesas ?? null;
       this.dataInicio = viagem.dataInicio ? this.toDatetimeLocal(viagem.dataInicio) : '';
       this.dataFim = viagem.dataFim ? this.toDatetimeLocal(viagem.dataFim) : '';
       this.status = viagem.status || 'EM_ANDAMENTO';
@@ -85,6 +96,9 @@ export class CreateViagemDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    if (this.isEditMode && this.viagemId) {
+      this.loadDespesas(this.viagemId);
+    }
   }
 
   get isEditMode(): boolean {
@@ -105,14 +119,17 @@ export class CreateViagemDialogComponent implements OnInit {
 
   get isFormValid(): boolean {
     return (
-      this.localizacaoFrete.trim().length > 0 &&
+      this.inicioFrete.trim().length > 0 &&
       this.valorFrete !== null && this.valorFrete >= 0 &&
       this.dataInicio.length > 0 &&
       this.selectedProfissionalId !== null &&
       this.selectedEmpresaId !== null &&
       this.selectedVeiculoId !== null
     );
+  }
 
+  get totalDespesas(): number {
+    return this.despesasList.reduce((sum, d) => sum + (d.valor || 0), 0);
   }
 
   loadData(): void {
@@ -136,11 +153,38 @@ export class CreateViagemDialogComponent implements OnInit {
     });
   }
 
+  loadDespesas(viagemId: string): void {
+    this.despesaService.findByViagemId(viagemId).subscribe({
+      next: (despesas) => {
+        this.despesasList = (despesas || []).map(d => ({
+          id: d.id,
+          nome: d.nome || '',
+          descricao: d.descricao || '',
+          valor: d.valor ?? null
+        }));
+        this.existingDespesaIds = this.despesasList.filter(d => d.id).map(d => d.id!);
+      },
+      error: () => { /* ignore, despesas list stays empty */ }
+    });
+  }
+
   onVeiculoChange(): void {
     if (!this.selectedVeiculoId) return;
     const veiculo = this.veiculos.find(v => v.id === this.selectedVeiculoId);
     if (veiculo?.profissional?.id) {
       this.selectedProfissionalId = veiculo.profissional.id;
+    }
+  }
+
+  addDespesa(): void {
+    this.despesasList.push({ nome: '', descricao: '', valor: null });
+  }
+
+  removeDespesa(index: number): void {
+    const removed = this.despesasList.splice(index, 1)[0];
+    // If it had an id (existing in DB), delete it from backend
+    if (removed.id) {
+      this.despesaService.delete(removed.id).subscribe();
     }
   }
 
@@ -154,11 +198,10 @@ export class CreateViagemDialogComponent implements OnInit {
       veiculo: this.selectedVeiculoId ? { id: this.selectedVeiculoId } as Veiculo : null,
       profissional: this.selectedProfissionalId ? { id: this.selectedProfissionalId } as Profissional : null,
       empresa: this.selectedEmpresaId ? { id: this.selectedEmpresaId } as Empresa : null,
-      localizacaoFrete: this.localizacaoFrete.trim(),
+      inicioFrete: this.inicioFrete.trim(),
+      fimFrete: this.fimFrete.trim() || null,
       valorFrete: this.valorFrete ?? 0,
       comissao: this.comissao ?? 0,
-      abastecimento: this.abastecimento ?? 0,
-      despesas: this.despesas ?? 0,
       dataInicio: this.dataInicio ? this.toIsoString(this.dataInicio) : '',
       dataFim: this.dataFim ? this.toIsoString(this.dataFim) : null,
       status: this.status
@@ -170,13 +213,52 @@ export class CreateViagemDialogComponent implements OnInit {
 
     request$.subscribe({
       next: (saved) => {
-        this.isSaving = false;
-        this.dialogRef.close(saved);
+        const viagemId = saved.id!;
+        this.saveDespesas(viagemId, () => {
+          this.isSaving = false;
+          this.dialogRef.close(saved);
+        });
       },
       error: (err) => {
         console.error('Erro ao salvar viagem:', err);
         this.isSaving = false;
         this.errorMessage = 'Falha ao salvar. Tente novamente.';
+      }
+    });
+  }
+
+  private saveDespesas(viagemId: string, onComplete: () => void): void {
+    const despesasToSave = this.despesasList.filter(d => d.nome.trim() || d.valor);
+    if (despesasToSave.length === 0) {
+      onComplete();
+      return;
+    }
+
+    let completed = 0;
+    const checkDone = () => {
+      if (++completed >= despesasToSave.length) onComplete();
+    };
+
+    despesasToSave.forEach(d => {
+      const payload: Partial<Despesa> = {
+        viagem: { id: viagemId },
+        nome: d.nome.trim(),
+        descricao: d.descricao.trim(),
+        valor: d.valor ?? 0
+      };
+
+      if (d.id) {
+        // Update existing despesa
+        this.despesaService.update(d.id, payload).subscribe({
+          next: () => checkDone(),
+          error: () => checkDone()
+        });
+      } else {
+        // Create new despesa
+        this.despesaService.create(payload).subscribe({
+          next: () => checkDone(),
+          error: () => checkDone()
+        });
       }
     });
   }

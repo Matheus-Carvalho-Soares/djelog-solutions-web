@@ -19,6 +19,23 @@
   <div class="dialog-body">
     <div class="form-group">
       <label class="field-label">
+        <mat-icon class="label-icon">local_shipping</mat-icon>
+        NOME DO VEÍCULO
+      </label>
+      <div class="input-wrapper">
+        <input
+          type="text"
+          class="neon-input"
+          [(ngModel)]="nome"
+          placeholder="Ex: Caminhão Principal"
+          autocomplete="off"
+        />
+        <div class="input-border"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="field-label">
         <mat-icon class="label-icon">directions_car</mat-icon>
         MARCA DO VEÍCULO
       </label>
@@ -62,6 +79,23 @@
           class="neon-input"
           [(ngModel)]="ano"
           placeholder="Ex: 2024"
+          autocomplete="off"
+        />
+        <div class="input-border"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="field-label">
+        <mat-icon class="label-icon">fitness_center</mat-icon>
+        CAPACIDADE DE PESO (KG)
+      </label>
+      <div class="input-wrapper">
+        <input
+          type="number"
+          class="neon-input"
+          [(ngModel)]="qtdPeso"
+          placeholder="Ex: 30000"
           autocomplete="off"
         />
         <div class="input-border"></div>

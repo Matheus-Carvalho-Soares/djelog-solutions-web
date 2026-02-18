@@ -158,6 +158,12 @@
   text-transform: uppercase;
 }
 
+.field-label .required {
+  color: #ef4444;
+  font-size: 14px;
+  margin-left: -4px;
+}
+
 .label-icon {
   font-size: 16px;
   width: 16px;

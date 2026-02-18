@@ -388,3 +388,29 @@
   width: 18px;
   height: 18px;
 }
+
+/* LOADING */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px;
+}
+
+.loading-text {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  color: rgba(251, 191, 36, 0.5);
+}
+
+/* TOTAL DEDUCTION */
+.finance-row.total-deduction {
+  border-left: 3px solid rgba(251, 191, 36, 0.5);
+  background: rgba(251, 191, 36, 0.05);
+}
+
+.no-despesas .row-label,
+.no-despesas .row-sublabel {
+  color: rgba(255, 255, 255, 0.3);
+}

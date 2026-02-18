@@ -64,11 +64,11 @@ export class DashboardService {
 
     const receitaTotal = todasViagens.reduce((sum, v) => sum + v.valorFrete, 0);
     const despesaTotal = todasViagens.reduce((sum, v) => 
-      sum + v.despesas + v.abastecimento + (v.valorFrete * v.comissao / 100), 0);
+      sum + (v.valorFrete * (v.comissao || 0) / 100), 0);
     const lucroLiquido = receitaTotal - despesaTotal;
 
     const viagensComPrejuizo = todasViagens.filter(v => {
-      const lucroViagem = v.valorFrete - (v.despesas + v.abastecimento + (v.valorFrete * v.comissao / 100));
+      const lucroViagem = v.valorFrete - (v.valorFrete * (v.comissao || 0) / 100);
       return lucroViagem < 0;
     }).length;
 
@@ -98,7 +98,7 @@ export class DashboardService {
 
       const receita = viagensDoMes.reduce((sum, v) => sum + v.valorFrete, 0);
       const despesa = viagensDoMes.reduce((sum, v) => 
-        sum + v.despesas + v.abastecimento + (v.valorFrete * v.comissao / 100), 0);
+        sum + (v.valorFrete * (v.comissao || 0) / 100), 0);
 
       data.push({
         mes: mesNome,
@@ -116,13 +116,13 @@ export class DashboardService {
 
     // Alertas de viagens com prejuízo
     this.viagens.forEach(v => {
-      const lucro = v.valorFrete - (v.despesas + v.abastecimento + (v.valorFrete * v.comissao / 100));
+      const lucro = v.valorFrete - (v.valorFrete * (v.comissao || 0) / 100);
       if (lucro < 0) {
         alerts.push({
           id: `alert-prejuizo-${v.id}`,
           tipo: 'prejuizo',
           titulo: 'Viagem com prejuízo',
-          descricao: `${v.localizacaoFrete} - Prejuízo de R$ ${Math.abs(lucro).toFixed(2)}`,
+          descricao: `${v.inicioFrete || ''} → ${v.fimFrete || ''} - Prejuízo de R$ ${Math.abs(lucro).toFixed(2)}`,
           viagemId: v.id,
           severidade: 'alta'
         });
@@ -134,7 +134,7 @@ export class DashboardService {
           id: `alert-sem-fat-${v.id}`,
           tipo: 'sem-faturamento',
           titulo: 'Viagem sem faturamento',
-          descricao: `${v.localizacaoFrete} - Necessário lançar valor do frete`,
+          descricao: `${v.inicioFrete || ''} → ${v.fimFrete || ''} - Necessário lançar valor do frete`,
           viagemId: v.id,
           severidade: 'alta'
         });
@@ -153,28 +153,8 @@ export class DashboardService {
       }
     });
 
-    // Alertas de veículos com alta despesa
-    const vehicleExpenses = new Map<string, number>();
-    this.viagens.forEach(v => {
-      if (v.veiculo?.id) {
-        const current = vehicleExpenses.get(v.veiculo.id) || 0;
-        vehicleExpenses.set(v.veiculo.id, current + v.despesas + v.abastecimento);
-      }
-    });
-
-    vehicleExpenses.forEach((despesa, veiculoId) => {
-      if (despesa > 20000) {
-        const veiculo = this.veiculos.find(v => v.id === veiculoId);
-        alerts.push({
-          id: `alert-despesa-${veiculoId}`,
-          tipo: 'alta-despesa',
-          titulo: 'Veículo com alta despesa',
-          descricao: `${veiculo?.marca || 'Veículo'} - Total de R$ ${despesa.toFixed(2)} em despesas`,
-          veiculoId: veiculoId,
-          severidade: 'media'
-        });
-      }
-    });
+    // Alertas de veículos com alta despesa (simplified since despesas are now in separate table)
+    // Without loading despesas from backend, we skip vehicle expense alerts for the mock service
 
     return of(alerts.slice(0, 10)); // Limitar a 10 alertas mais relevantes
   }
@@ -188,7 +168,7 @@ export class DashboardService {
       if (viagensVeiculo.length > 0) {
         const receita = viagensVeiculo.reduce((sum, v) => sum + v.valorFrete, 0);
         const despesas = viagensVeiculo.reduce((sum, v) => 
-          sum + v.despesas + v.abastecimento + (v.valorFrete * v.comissao / 100), 0);
+          sum + (v.valorFrete * (v.comissao || 0) / 100), 0);
         const lucro = receita - despesas;
 
         performance.push({

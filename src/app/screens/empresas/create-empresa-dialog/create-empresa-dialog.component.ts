@@ -29,6 +29,9 @@ import { Empresa } from '../../../models/empresa.model';
 export class CreateEmpresaDialogComponent {
   nome = '';
   descricao = '';
+  nomeContato = '';
+  telefoneContato = '';
+  emailContato = '';
   isSaving = false;
   errorMessage = '';
   private empresaId: string | undefined;
@@ -43,6 +46,9 @@ export class CreateEmpresaDialogComponent {
       this.empresaId = empresa.id;
       this.nome = empresa.nome || '';
       this.descricao = empresa.descricao || '';
+      this.nomeContato = empresa.nomeContato || '';
+      this.telefoneContato = empresa.telefoneContato || '';
+      this.emailContato = empresa.emailContato || '';
     }
   }
 
@@ -63,7 +69,7 @@ export class CreateEmpresaDialogComponent {
   }
 
   get isFormValid(): boolean {
-    return this.nome.trim().length > 0;
+    return this.nome.trim().length > 0 && this.nomeContato.trim().length > 0;
   }
 
   save(): void {
@@ -74,7 +80,10 @@ export class CreateEmpresaDialogComponent {
 
     const empresa: Partial<Empresa> = {
       nome: this.nome.trim(),
-      descricao: this.descricao.trim() || undefined
+      descricao: this.descricao.trim() || undefined,
+      nomeContato: this.nomeContato.trim() || undefined,
+      telefoneContato: this.telefoneContato.trim() || undefined,
+      emailContato: this.emailContato.trim() || undefined
     };
 
     const request$ = this.isEditMode && this.empresaId

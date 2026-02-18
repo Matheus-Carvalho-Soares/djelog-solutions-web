@@ -143,6 +143,48 @@
           </td>
         </ng-container>
 
+        <!-- Coluna Nome Contato -->
+        <ng-container matColumnDef="nomeContato">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">person</mat-icon>
+              CONTATO
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let e">
+            <span *ngIf="e.nomeContato">{{ e.nomeContato }}</span>
+            <span class="no-data" *ngIf="!e.nomeContato">—</span>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Telefone Contato -->
+        <ng-container matColumnDef="telefoneContato">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">phone</mat-icon>
+              TELEFONE
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let e">
+            <span *ngIf="e.telefoneContato">{{ e.telefoneContato }}</span>
+            <span class="no-data" *ngIf="!e.telefoneContato">—</span>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Email Contato -->
+        <ng-container matColumnDef="emailContato">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">email</mat-icon>
+              EMAIL
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let e">
+            <span *ngIf="e.emailContato">{{ e.emailContato }}</span>
+            <span class="no-data" *ngIf="!e.emailContato">—</span>
+          </td>
+        </ng-container>
+
         <!-- Coluna Acoes -->
         <ng-container matColumnDef="acoes">
           <th mat-header-cell *matHeaderCellDef>

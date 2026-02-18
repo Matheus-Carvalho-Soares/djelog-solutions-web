@@ -32,7 +32,7 @@ import { CreateEmpresaDialogComponent } from './create-empresa-dialog/create-emp
 export class EmpresasComponent implements OnInit {
   empresas: Empresa[] = [];
   filteredEmpresas: Empresa[] = [];
-  displayedColumns: string[] = ['nome', 'descricao', 'acoes'];
+  displayedColumns: string[] = ['nome', 'descricao', 'nomeContato', 'telefoneContato', 'emailContato', 'acoes'];
   isLoading = true;
   hasError = false;
 

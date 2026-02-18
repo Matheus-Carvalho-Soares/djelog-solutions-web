@@ -50,6 +50,57 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <label class="field-label">
+        <mat-icon class="label-icon">person</mat-icon>
+        NOME DO CONTATO <span class="required">*</span>
+      </label>
+      <div class="input-wrapper">
+        <input
+          type="text"
+          class="neon-input"
+          [(ngModel)]="nomeContato"
+          placeholder="Nome do contato"
+          autocomplete="off"
+        />
+        <div class="input-border"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="field-label">
+        <mat-icon class="label-icon">phone</mat-icon>
+        TELEFONE DO CONTATO
+      </label>
+      <div class="input-wrapper">
+        <input
+          type="tel"
+          class="neon-input"
+          [(ngModel)]="telefoneContato"
+          placeholder="Telefone do contato (opcional)"
+          autocomplete="off"
+        />
+        <div class="input-border"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="field-label">
+        <mat-icon class="label-icon">email</mat-icon>
+        EMAIL DO CONTATO
+      </label>
+      <div class="input-wrapper">
+        <input
+          type="email"
+          class="neon-input"
+          [(ngModel)]="emailContato"
+          placeholder="email@empresa.com (opcional)"
+          autocomplete="off"
+        />
+        <div class="input-border"></div>
+      </div>
+    </div>
+
     <!-- Error message -->
     <div class="error-banner" *ngIf="errorMessage">
       <mat-icon class="error-banner-icon">error_outline</mat-icon>

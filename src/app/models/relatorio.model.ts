@@ -1,12 +1,15 @@
+import { Despesa } from './viagem.model';
+
 export interface ViagemRelatorioDTO {
   dataInicio: string;
   dataFim: string;
   status: string;
-  localizacaoFrete: string;
+  inicioFrete: string;
+  fimFrete: string;
   valorFrete: number;
   comissao: number;
-  abastecimento: number;
-  despesas: number;
+  despesas: Despesa[];
+  totalDespesas: number;
   profissionalNome: string;
   empresaNome: string;
   veiculoMarca: string;

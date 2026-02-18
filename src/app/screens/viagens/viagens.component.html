@@ -63,15 +63,15 @@
         <div class="filter-group">
           <label class="filter-label">
             <mat-icon class="filter-label-icon">location_on</mat-icon>
-            LOCALIZAÇÃO
+            FRETE
           </label>
           <div class="filter-input-wrapper">
             <input
               type="text"
               class="filter-input"
-              [(ngModel)]="filterLocalizacao"
+              [(ngModel)]="filterFrete"
               (ngModelChange)="applyFilters()"
-              placeholder="Buscar por localização..."
+              placeholder="Buscar por origem ou destino..."
               autocomplete="off"
             />
             <mat-icon class="filter-search-icon">search</mat-icon>
@@ -169,18 +169,18 @@
           </td>
         </ng-container>
 
-        <!-- Coluna Localização -->
-        <ng-container matColumnDef="localizacao">
+        <!-- Coluna Frete -->
+        <ng-container matColumnDef="frete">
           <th mat-header-cell *matHeaderCellDef>
             <div class="header-cell-content">
               <mat-icon class="header-icon">location_on</mat-icon>
-              LOCALIZAÇÃO
+              FRETE
             </div>
           </th>
           <td mat-cell *matCellDef="let v">
             <div class="localizacao-cell">
               <mat-icon class="loc-icon">place</mat-icon>
-              <span>{{ v.localizacaoFrete }}</span>
+              <span>{{ v.inicioFrete }}<span *ngIf="v.fimFrete"> → {{ v.fimFrete }}</span></span>
             </div>
           </td>
         </ng-container>
