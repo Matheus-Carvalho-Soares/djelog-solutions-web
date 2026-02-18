@@ -47,13 +47,12 @@ export class DespesasDialogComponent implements OnInit {
     return this.despesas.reduce((sum, d) => sum + (d.valor || 0), 0) + this.comissaoValor || 0;
   }
 
-  get comissaoValor(): number {
+  get comissaoValor(): number { 
     return (this.viagem.valorFrete * this.viagem.comissao / 100) || 0;
   }
 
   get lucroLiquido(): number {
     return (this.viagem.valorFrete || 0)
-      - this.comissaoValor
       - this.totalDespesas;
   }
 

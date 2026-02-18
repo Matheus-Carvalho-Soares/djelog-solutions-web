@@ -73,7 +73,6 @@ export class LoginComponent {
         this.isLoading = false;
         
         if (response.success) {
-          console.log(response);
           sessionStorage.setItem('authToken', response.token || '');
           sessionStorage.setItem('userId', response.userId || '');
           sessionStorage.setItem('userEmail', response.email || '');

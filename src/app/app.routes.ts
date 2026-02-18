@@ -10,6 +10,8 @@ import { ViagensComponent } from './screens/viagens/viagens.component';
 import { ConfiguracoesComponent } from './screens/configuracoes/configuracoes.component';
 import { RelatoriosComponent } from './screens/relatorios/relatorios.component';
 import { RelatorioPorDataComponent } from './screens/relatorios/relatorio-por-data/relatorio-por-data.component';
+import { ViagensComissionadasComponent } from './screens/viagens-comissionadas/viagens-comissionadas.component';
+import { EstadiasComponent } from './screens/estadias/estadias.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -22,6 +24,8 @@ export const routes: Routes = [
       { path: 'veiculos', component: VeiculosComponent },
       { path: 'empresas', component: EmpresasComponent },
       { path: 'viagens', component: ViagensComponent },
+      { path: 'viagens-comissionadas', component: ViagensComissionadasComponent },
+      { path: 'estadias', component: EstadiasComponent },
       { path: 'configuracoes', component: ConfiguracoesComponent },
       { path: 'relatorios', component: RelatoriosComponent },
       { path: 'relatorios/por-data', component: RelatorioPorDataComponent }

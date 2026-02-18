@@ -1,0 +1,156 @@
+<div class="dialog-shell">
+  <div class="dialog-scan-line"></div>
+
+  <!-- Header -->
+  <div class="dialog-header">
+    <div class="header-title-group">
+      <div class="header-accent"></div>
+      <div>
+        <h2 class="dialog-title">{{ dialogTitle }}</h2>
+        <p class="dialog-subtitle">{{ dialogSubtitle }}</p>
+      </div>
+    </div>
+    <button class="close-btn" (click)="cancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Form -->
+  <div class="dialog-body">
+    <!-- Section: Período -->
+    <div class="form-section">
+      <div class="section-label">
+        <mat-icon>date_range</mat-icon>
+        PERÍODO DA VIAGEM
+      </div>
+
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label class="field-label">
+            <mat-icon class="label-icon">event</mat-icon>
+            INÍCIO DA VIAGEM *
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="date"
+              class="neon-input"
+              [(ngModel)]="inicioFrete"
+            />
+            <div class="input-border"></div>
+          </div>
+        </div>
+
+        <div class="form-group flex-1">
+          <label class="field-label">
+            <mat-icon class="label-icon">event_available</mat-icon>
+            FIM DA VIAGEM
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="date"
+              class="neon-input"
+              [(ngModel)]="fimFrete"
+            />
+            <div class="input-border"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Valores -->
+    <div class="form-section">
+      <div class="section-label">
+        <mat-icon>payments</mat-icon>
+        VALORES
+      </div>
+
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label class="field-label">
+            <mat-icon class="label-icon">attach_money</mat-icon>
+            VALOR TOTAL *
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="number"
+              class="neon-input"
+              [(ngModel)]="valor"
+              placeholder="0"
+              min="0"
+              autocomplete="off"
+            />
+            <div class="input-border"></div>
+          </div>
+        </div>
+
+        <div class="form-group flex-1">
+          <label class="field-label">
+            <mat-icon class="label-icon">attach_money</mat-icon>
+            COMISSÃO (R$)
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="number"
+              class="neon-input"
+              [(ngModel)]="comissao"
+              placeholder="0"
+              min="0"
+              autocomplete="off"
+            />
+            <div class="input-border"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Descrição -->
+    <div class="form-section">
+      <div class="section-label">
+        <mat-icon>description</mat-icon>
+        DESCRIÇÃO
+      </div>
+
+      <div class="form-group">
+        <label class="field-label">
+          <mat-icon class="label-icon">notes</mat-icon>
+          DESCRIÇÃO DA VIAGEM
+        </label>
+        <div class="input-wrapper">
+          <textarea
+            class="neon-input neon-textarea"
+            [(ngModel)]="descricao"
+            placeholder="Ex: Frete feito pelo motorista X"
+            rows="3"
+            autocomplete="off"
+          ></textarea>
+          <div class="input-border"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error message -->
+    <div class="error-banner" *ngIf="errorMessage">
+      <mat-icon class="error-banner-icon">error_outline</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="dialog-footer">
+    <button class="cancel-btn" (click)="cancel()" [disabled]="isSaving">
+      <span>CANCELAR</span>
+    </button>
+    <button
+      class="save-btn"
+      (click)="save()"
+      [disabled]="!isFormValid || isSaving"
+      [class.saving]="isSaving"
+    >
+      <mat-spinner *ngIf="isSaving" diameter="18" class="save-spinner"></mat-spinner>
+      <mat-icon *ngIf="!isSaving">check</mat-icon>
+      <span>{{ isSaving ? 'SALVANDO...' : actionLabel }}</span>
+    </button>
+  </div>
+
+  <div class="dialog-corner"></div>
+</div>

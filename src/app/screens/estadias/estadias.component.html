@@ -1,0 +1,215 @@
+<div class="estadias-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <div class="page-title-group">
+        <div class="title-accent"></div>
+        <div>
+          <h1 class="page-title">ESTADIAS</h1>
+          <p class="page-subtitle">Taxas de estadia cobradas por viagens prolongadas</p>
+        </div>
+      </div>
+      <div class="counter-badge" *ngIf="!isLoading">
+        <mat-icon class="counter-icon">hotel</mat-icon>
+        <span class="counter-value">{{ filteredEstadias.length }}</span>
+        <span class="counter-label">REGISTROS</span>
+      </div>
+    </div>
+
+    <button class="create-btn" (click)="openCreateDialog()">
+      <mat-icon>add_circle</mat-icon>
+      <span>Nova Estadia</span>
+      <div class="btn-glow"></div>
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <div class="loading-pulse">
+      <div class="pulse-ring"></div>
+      <div class="pulse-ring delay-1"></div>
+      <div class="pulse-ring delay-2"></div>
+      <mat-icon class="loading-icon">hotel</mat-icon>
+    </div>
+    <p class="loading-text">Carregando estadias...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="hasError && !isLoading">
+    <div class="error-icon-wrapper">
+      <mat-icon class="error-icon">warning_amber</mat-icon>
+    </div>
+    <p class="error-title">Falha ao carregar dados</p>
+    <p class="error-subtitle">Verifique a conexão com o servidor</p>
+    <button class="retry-btn" (click)="loadEstadias()">
+      <mat-icon>refresh</mat-icon>
+      <span>Tentar Novamente</span>
+    </button>
+  </div>
+
+  <!-- Table Panel -->
+  <div class="table-panel" *ngIf="!isLoading && !hasError">
+    <div class="table-scan-line"></div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar" *ngIf="estadias.length > 0">
+      <button class="filter-toggle-btn" (click)="toggleFilters()" [class.active]="filtersVisible || hasActiveFilters">
+        <mat-icon>filter_list</mat-icon>
+        <span>Filtros</span>
+        <div class="filter-indicator" *ngIf="hasActiveFilters"></div>
+      </button>
+
+      <div class="filter-fields" [class.visible]="filtersVisible">
+        <div class="filter-group">
+          <label class="filter-label">
+            <mat-icon class="filter-label-icon">swap_horiz</mat-icon>
+            VIAGEM
+          </label>
+          <div class="filter-input-wrapper">
+            <input
+              type="text"
+              class="filter-input"
+              [(ngModel)]="filterViagem"
+              (ngModelChange)="applyFilters()"
+              placeholder="Buscar por frete da viagem..."
+              autocomplete="off"
+            />
+            <mat-icon class="filter-search-icon">search</mat-icon>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">
+            <mat-icon class="filter-label-icon">description</mat-icon>
+            DESCRIÇÃO
+          </label>
+          <div class="filter-input-wrapper">
+            <input
+              type="text"
+              class="filter-input"
+              [(ngModel)]="filterDescricao"
+              (ngModelChange)="applyFilters()"
+              placeholder="Buscar por descrição..."
+              autocomplete="off"
+            />
+            <mat-icon class="filter-search-icon">search</mat-icon>
+          </div>
+        </div>
+
+        <button class="filter-clear-btn" *ngIf="hasActiveFilters" (click)="clearFilters()">
+          <mat-icon>clear</mat-icon>
+          <span>Limpar</span>
+        </button>
+      </div>
+
+      <div class="filter-results" *ngIf="hasActiveFilters">
+        <span class="results-count">{{ filteredEstadias.length }}</span>
+        <span class="results-label">de {{ estadias.length }} registros</span>
+      </div>
+    </div>
+
+    <div class="table-container" *ngIf="estadias.length > 0">
+      <table mat-table [dataSource]="filteredEstadias" class="estadias-table">
+
+        <!-- Coluna Viagem -->
+        <ng-container matColumnDef="viagem">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">swap_horiz</mat-icon>
+              VIAGEM
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let e">
+            <div class="viagem-cell" *ngIf="e.viagem">
+              <mat-icon class="viagem-icon">route</mat-icon>
+              <span class="viagem-label">{{ getViagemLabel(e.viagem) }}</span>
+            </div>
+            <span class="no-data" *ngIf="!e.viagem">—</span>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Descrição -->
+        <ng-container matColumnDef="descricao">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">description</mat-icon>
+              DESCRIÇÃO
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let e">
+            <span class="descricao-text" *ngIf="e.descricao">{{ e.descricao }}</span>
+            <span class="no-data" *ngIf="!e.descricao">—</span>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Valor -->
+        <ng-container matColumnDef="valor">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">attach_money</mat-icon>
+              VALOR
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let e">
+            <span class="valor-estadia">{{ formatCurrency(e.valor) }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Ações -->
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="header-cell-content">
+              <mat-icon class="header-icon">settings</mat-icon>
+              AÇÕES
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let e">
+            <div class="actions-cell">
+              <button class="action-btn edit-btn" (click)="openEditDialog(e)" matTooltip="Editar estadia">
+                <mat-icon>edit</mat-icon>
+                <span>Editar</span>
+              </button>
+              <button class="action-btn delete-btn" (click)="confirmDelete(e)" matTooltip="Excluir estadia">
+                <mat-icon>delete</mat-icon>
+                <span>Excluir</span>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="data-row"></tr>
+      </table>
+    </div>
+
+    <!-- No Filter Results -->
+    <div class="empty-state filter-empty" *ngIf="filteredEstadias.length === 0 && estadias.length > 0">
+      <div class="empty-icon-wrapper">
+        <mat-icon class="empty-icon">search_off</mat-icon>
+        <div class="empty-ring"></div>
+      </div>
+      <p class="empty-title">Nenhum resultado encontrado</p>
+      <p class="empty-subtitle">Tente ajustar os filtros de busca</p>
+      <button class="create-btn-secondary" (click)="clearFilters()">
+        <mat-icon>clear</mat-icon>
+        <span>Limpar Filtros</span>
+      </button>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="filteredEstadias.length === 0 && estadias.length === 0">
+      <div class="empty-icon-wrapper">
+        <mat-icon class="empty-icon">hotel</mat-icon>
+        <div class="empty-ring"></div>
+      </div>
+      <p class="empty-title">Nenhuma estadia cadastrada</p>
+      <p class="empty-subtitle">Registre a primeira estadia do sistema</p>
+      <button class="create-btn-secondary" (click)="openCreateDialog()">
+        <mat-icon>add_circle</mat-icon>
+        <span>Cadastrar Estadia</span>
+      </button>
+    </div>
+
+    <div class="panel-corner"></div>
+  </div>
+</div>

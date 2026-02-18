@@ -1,0 +1,121 @@
+<div class="dialog-shell">
+  <div class="dialog-scan-line"></div>
+
+  <!-- Header -->
+  <div class="dialog-header">
+    <div class="header-title-group">
+      <div class="header-accent"></div>
+      <div>
+        <h2 class="dialog-title">{{ dialogTitle }}</h2>
+        <p class="dialog-subtitle">{{ dialogSubtitle }}</p>
+      </div>
+    </div>
+    <button class="close-btn" (click)="cancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Loading overlay -->
+  <div class="loading-overlay" *ngIf="isLoadingData">
+    <mat-spinner diameter="32" class="data-spinner"></mat-spinner>
+    <span class="loading-label">Carregando dados...</span>
+  </div>
+
+  <!-- Form -->
+  <div class="dialog-body" *ngIf="!isLoadingData">
+    <!-- Section: Viagem -->
+    <div class="form-section">
+      <div class="section-label">
+        <mat-icon>swap_horiz</mat-icon>
+        VIAGEM ASSOCIADA
+      </div>
+
+      <div class="form-group">
+        <label class="field-label">
+          <mat-icon class="label-icon">route</mat-icon>
+          VIAGEM *
+        </label>
+        <div class="select-wrapper">
+          <select
+            class="neon-select"
+            [(ngModel)]="selectedViagemId"
+          >
+            <option [ngValue]="null">— Selecionar viagem —</option>
+            <option *ngFor="let v of viagens" [ngValue]="v.id">
+              {{ getViagemLabel(v) }}
+            </option>
+          </select>
+          <mat-icon class="select-arrow">expand_more</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Dados -->
+    <div class="form-section">
+      <div class="section-label">
+        <mat-icon>payments</mat-icon>
+        DADOS DA ESTADIA
+      </div>
+
+      <div class="form-group">
+        <label class="field-label">
+          <mat-icon class="label-icon">attach_money</mat-icon>
+          VALOR *
+        </label>
+        <div class="input-wrapper">
+          <input
+            type="number"
+            class="neon-input"
+            [(ngModel)]="valor"
+            placeholder="0"
+            min="0"
+            autocomplete="off"
+          />
+          <div class="input-border"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="field-label">
+          <mat-icon class="label-icon">notes</mat-icon>
+          DESCRIÇÃO
+        </label>
+        <div class="input-wrapper">
+          <textarea
+            class="neon-input neon-textarea"
+            [(ngModel)]="descricao"
+            placeholder="Descreva o motivo da estadia..."
+            rows="3"
+            autocomplete="off"
+          ></textarea>
+          <div class="input-border"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error message -->
+    <div class="error-banner" *ngIf="errorMessage">
+      <mat-icon class="error-banner-icon">error_outline</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="dialog-footer">
+    <button class="cancel-btn" (click)="cancel()" [disabled]="isSaving">
+      <span>CANCELAR</span>
+    </button>
+    <button
+      class="save-btn"
+      (click)="save()"
+      [disabled]="!isFormValid || isSaving"
+      [class.saving]="isSaving"
+    >
+      <mat-spinner *ngIf="isSaving" diameter="18" class="save-spinner"></mat-spinner>
+      <mat-icon *ngIf="!isSaving">check</mat-icon>
+      <span>{{ isSaving ? 'SALVANDO...' : actionLabel }}</span>
+    </button>
+  </div>
+
+  <div class="dialog-corner"></div>
+</div>

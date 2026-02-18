@@ -37,7 +37,6 @@ export class AuthService {
    * @returns Observable com resposta do login
    */
   login(email: string, senha: string): Observable<LoginResponse> {
-    console.log('Login attempt:', { email, senha});
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { email, senha });
   }
   /**

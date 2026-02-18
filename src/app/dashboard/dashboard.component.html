@@ -28,6 +28,14 @@
         <mat-icon>swap_horiz</mat-icon>
         <span *ngIf="!isSidebarCollapsed">Viagens</span>
       </a>
+      <a mat-list-item class="nav-item" routerLink="/dashboard/viagens-comissionadas" routerLinkActive="active" title="Viagens Comissionadas">
+        <mat-icon>local_taxi</mat-icon>
+        <span *ngIf="!isSidebarCollapsed">Comissionadas</span>
+      </a>
+      <a mat-list-item class="nav-item" routerLink="/dashboard/estadias" routerLinkActive="active" title="Estadias">
+        <mat-icon>hotel</mat-icon>
+        <span *ngIf="!isSidebarCollapsed">Estadias</span>
+      </a>
       <a mat-list-item class="nav-item" routerLink="/dashboard/veiculos" routerLinkActive="active" title="Veiculos">
         <mat-icon>local_shipping</mat-icon>
         <span *ngIf="!isSidebarCollapsed">Veiculos</span>
