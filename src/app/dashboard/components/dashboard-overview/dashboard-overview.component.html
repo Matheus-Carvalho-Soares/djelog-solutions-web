@@ -60,7 +60,25 @@
       </div>
     </div>
 
-    <app-financial-cards *ngIf="financialSummary" [summary]="financialSummary"></app-financial-cards>
+    <!-- Comissões Toggle -->
+    <div class="comissoes-toggle" *ngIf="comissaoComissionada && comissaoComissionada.quantidadeViagens > 0">
+      <mat-checkbox
+        [(ngModel)]="includeComissoes"
+        class="comissoes-checkbox"
+        color="warn"
+      >
+        <span class="comissoes-toggle-label">
+          <mat-icon class="comissoes-toggle-icon">payments</mat-icon>
+          Exibir comissões de viagens comissionadas
+        </span>
+      </mat-checkbox>
+    </div>
+
+    <app-financial-cards
+      *ngIf="financialSummary"
+      [summary]="financialSummary"
+      [comissaoComissionada]="includeComissoes ? comissaoComissionada : null"
+    ></app-financial-cards>
 
     <app-performance-chart
       *ngIf="monthlyPerformance && weeklyPerformance"

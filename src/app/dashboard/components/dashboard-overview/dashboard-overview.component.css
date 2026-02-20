@@ -295,3 +295,56 @@
     width: 100%;
   }
 }
+
+/* ========== COMISSÕES TOGGLE ========== */
+
+.comissoes-toggle {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  background: rgba(139, 92, 246, 0.06);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.comissoes-toggle:hover {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.25);
+}
+
+.comissoes-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.5px;
+}
+
+.comissoes-toggle-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #8b5cf6;
+}
+
+:host ::ng-deep .comissoes-checkbox .mdc-checkbox__background {
+  border-color: rgba(139, 92, 246, 0.5) !important;
+}
+
+:host ::ng-deep .comissoes-checkbox .mdc-checkbox--selected .mdc-checkbox__background {
+  background-color: #8b5cf6 !important;
+  border-color: #8b5cf6 !important;
+}
+
+:host ::ng-deep .comissoes-checkbox .mdc-checkbox__checkmark {
+  color: #ffffff !important;
+}
+
+:host ::ng-deep .comissoes-checkbox .mat-mdc-checkbox-touch-target {
+  height: 36px;
+  width: 36px;
+}

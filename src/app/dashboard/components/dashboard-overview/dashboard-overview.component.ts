@@ -12,6 +12,7 @@ import { RecentTripsComponent } from '../../components/recent-trips/recent-trips
 import {
   DashboardDataService,
   FinancialSummary,
+  ComissaoComissionadaSummary,
   MonthlyPerformance,
   WeeklyPerformance,
   VehiclePerformance,
@@ -20,6 +21,7 @@ import {
 import { Viagem } from '../../../models/viagem.model';
 import { Veiculo } from '../../../models/veiculo.model';
 import { Profissional } from '../../../models/profissional.model';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-dashboard-overview',
@@ -31,6 +33,7 @@ import { Profissional } from '../../../models/profissional.model';
     MatIconModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatCheckboxModule,
     FinancialCardsComponent,
     PerformanceChartComponent,
     VehicleTableComponent,
@@ -41,6 +44,8 @@ import { Profissional } from '../../../models/profissional.model';
 })
 export class DashboardOverviewComponent implements OnInit {
   financialSummary: FinancialSummary | null = null;
+  comissaoComissionada: ComissaoComissionadaSummary | null = null;
+  includeComissoes = false;
   monthlyPerformance: MonthlyPerformance | null = null;
   weeklyPerformance: WeeklyPerformance | null = null;
   vehiclePerformance: VehiclePerformance[] = [];
@@ -79,6 +84,7 @@ export class DashboardOverviewComponent implements OnInit {
         this.allVeiculos = data.allVeiculos;
 
         this.financialSummary = data.financialSummary;
+        this.comissaoComissionada = data.comissaoComissionada;
         this.monthlyPerformance = data.monthlyPerformance;
         this.weeklyPerformance = data.weeklyPerformance;
         this.vehiclePerformance = data.vehiclePerformance;

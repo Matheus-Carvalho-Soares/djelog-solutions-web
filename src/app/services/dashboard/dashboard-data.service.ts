@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { forkJoin, Observable, map, catchError, of } from 'rxjs';
 import { Veiculo } from '../../models/veiculo.model';
 import { Viagem, Despesa } from '../../models/viagem.model';
+import { ViagemComissionada } from '../../models/viagem-comissionada.model';
 import { ViagemService } from '../viagem/viagem.service';
 import { VeiculoService } from '../veiculo/veiculo.service';
 import { DespesaService } from '../despesa/despesa.service';
+import { ViagemComissionadaService } from '../viagem-comissionada/viagem-comissionada.service';
 
 export interface FinancialSummary {
   totalReceita: number;
@@ -12,6 +14,12 @@ export interface FinancialSummary {
   lucroLiquido: number;
   viagensAtivas: number;
   viagensPrejuizo: number;
+}
+
+export interface ComissaoComissionadaSummary {
+  totalComissao: number;
+  totalValor: number;
+  quantidadeViagens: number;
 }
 
 export type ChartViewMode = 'mensal' | 'semanal';
@@ -54,6 +62,7 @@ export interface RecentTrip {
 
 export interface DashboardData {
   financialSummary: FinancialSummary;
+  comissaoComissionada: ComissaoComissionadaSummary;
   monthlyPerformance: MonthlyPerformance;
   weeklyPerformance: WeeklyPerformance;
   vehiclePerformance: VehiclePerformance[];
@@ -71,20 +80,23 @@ export class DashboardDataService {
   constructor(
     private viagemService: ViagemService,
     private veiculoService: VeiculoService,
-    private despesaService: DespesaService
+    private despesaService: DespesaService,
+    private viagemComissionadaService: ViagemComissionadaService
   ) {}
 
   loadDashboard(): Observable<DashboardData> {
     return forkJoin({
       viagens: this.viagemService.findAll().pipe(catchError(() => of([] as Viagem[]))),
       veiculos: this.veiculoService.findAll().pipe(catchError(() => of([] as Veiculo[]))),
-      despesas: this.despesaService.findAll().pipe(catchError(() => of([] as Despesa[])))
+      despesas: this.despesaService.findAll().pipe(catchError(() => of([] as Despesa[]))),
+      viagensComissionadas: this.viagemComissionadaService.findAll().pipe(catchError(() => of([] as ViagemComissionada[])))
     }).pipe(
-      map(({ viagens, veiculos, despesas }) => {
+      map(({ viagens, veiculos, despesas, viagensComissionadas }) => {
         // Normalize nulls (204 No Content) to empty arrays
         const safeViagens = viagens ?? [];
         const safeVeiculos = veiculos ?? [];
         const safeDespesas = despesas ?? [];
+        const safeComissionadas = viagensComissionadas ?? [];
 
         // Agrupa despesas por viagem
         this.despesasPorViagem = new Map<string, number>();
@@ -97,6 +109,7 @@ export class DashboardDataService {
 
         return {
           ...this.buildDashboard(safeViagens, safeVeiculos),
+          comissaoComissionada: this.buildComissaoComissionada(safeComissionadas),
           allViagens: safeViagens,
           allVeiculos: safeVeiculos
         };
@@ -104,13 +117,25 @@ export class DashboardDataService {
     );
   }
 
-  buildDashboard(viagens: Viagem[], veiculos: Veiculo[]): Omit<DashboardData, 'allViagens' | 'allVeiculos'> {
+  buildDashboard(viagens: Viagem[], veiculos: Veiculo[]): Omit<DashboardData, 'allViagens' | 'allVeiculos' | 'comissaoComissionada'> {
     return {
       financialSummary: this.buildFinancialSummary(viagens),
       monthlyPerformance: this.buildMonthlyPerformance(viagens),
       weeklyPerformance: this.buildWeeklyPerformance(viagens),
       vehiclePerformance: this.buildVehiclePerformance(viagens, veiculos),
       recentTrips: this.buildRecentTrips(viagens)
+    };
+  }
+
+  // --------------- COMISSAO COMISSIONADA ---------------
+
+  buildComissaoComissionada(comissionadas: ViagemComissionada[]): ComissaoComissionadaSummary {
+    const totalComissao = comissionadas.reduce((acc, vc) => acc + (vc.comissao || 0), 0);
+    const totalValor = comissionadas.reduce((acc, vc) => acc + (vc.valor || 0), 0);
+    return {
+      totalComissao,
+      totalValor,
+      quantidadeViagens: comissionadas.length
     };
   }
 

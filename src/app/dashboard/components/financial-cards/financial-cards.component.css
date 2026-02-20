@@ -181,6 +181,57 @@
   background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
 }
 
+.comissao-glow {
+  background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);
+}
+
+/* COMISSÃO CARD */
+.comissao-card {
+  border-color: rgba(139, 92, 246, 0.2);
+}
+
+.comissao-card:hover {
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(139, 92, 246, 0.15);
+}
+
+.comissao-card .card-icon {
+  color: #8b5cf6;
+  filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.5));
+}
+
+.comissao-card .card-label {
+  color: rgba(139, 92, 246, 0.8);
+}
+
+.comissao-card .card-corner {
+  background: linear-gradient(135deg, transparent 0%, #8b5cf6 100%);
+}
+
+.comissao-value {
+  color: #c4b5fd !important;
+  text-shadow: 0 2px 20px rgba(139, 92, 246, 0.3) !important;
+}
+
+.comissao-meta {
+  color: rgba(139, 92, 246, 0.7) !important;
+}
+
+.comissao-meta .meta-icon {
+  color: rgba(139, 92, 246, 0.7);
+}
+
+/* 5 CARDS LAYOUT */
+.financial-cards-grid.five-cards {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+@media (max-width: 1600px) {
+  .financial-cards-grid.five-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 /* CARD VARIANTS */
 .profit-card.negative {
   border-color: rgba(239, 68, 68, 0.2);

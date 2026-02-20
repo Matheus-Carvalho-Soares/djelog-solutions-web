@@ -1,4 +1,4 @@
-<div class="financial-cards-grid">
+<div class="financial-cards-grid" [class.five-cards]="comissaoComissionada">
   <!-- RECEITA TOTAL -->
   <div class="finance-card revenue-card">
     <div class="card-header">
@@ -54,6 +54,23 @@
         {{ summary.viagensPrejuizo }} com prejuízo
       </span>
       <div class="card-glow trips-glow"></div>
+    </div>
+    <div class="card-corner"></div>
+  </div>
+
+  <!-- COMISSÕES COMISSIONADAS (only shown when checkbox is checked) -->
+  <div class="finance-card comissao-card" *ngIf="comissaoComissionada" @cardSlide>
+    <div class="card-header">
+      <mat-icon class="card-icon">payments</mat-icon>
+      <span class="card-label">COMISSÕES</span>
+    </div>
+    <div class="card-body">
+      <span class="card-value comissao-value">{{ comissaoComissionada.totalComissao | currency: 'BRL':'symbol':'1.0-0' }}</span>
+      <span class="card-meta comissao-meta">
+        <mat-icon class="meta-icon">local_taxi</mat-icon>
+        {{ comissaoComissionada.quantidadeViagens }} viagens comissionadas
+      </span>
+      <div class="card-glow comissao-glow"></div>
     </div>
     <div class="card-corner"></div>
   </div>
