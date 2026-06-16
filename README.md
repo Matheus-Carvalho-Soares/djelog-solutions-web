@@ -1,238 +1,147 @@
-# Tela de Login - Sistema Logístico
+# 🚚 Djelog Solutions Web
 
-## 📋 Estrutura de Arquivos
+Frontend do sistema **Djelog Solutions**, uma aplicação web para gestão logística. A interface permite autenticar usuários, acompanhar indicadores do dashboard e gerenciar cadastros e operações como motoristas/profissionais, veículos, empresas, viagens, viagens comissionadas, estadias, despesas e relatórios.
 
-```
-screens/
-├── login.component.ts        # Lógica do componente
-├── login.component.html      # Template visual
-└── login.component.css       # Estilos responsivos
+## ✨ Principais Recursos
 
-services/
-└── auth.service.ts           # Serviço de autenticação
-```
+- 🔐 Login e cadastro de usuários.
+- 📊 Dashboard com visão geral operacional e financeira.
+- 👷 Cadastro e manutenção de motoristas/profissionais, veículos e empresas.
+- 🛣️ Lançamento e acompanhamento de viagens.
+- 💰 Controle de viagens comissionadas.
+- 🧾 Registro de estadias e despesas vinculadas a viagens.
+- 📈 Relatórios por período com suporte a exportação/tratamento de dados no frontend.
+- 🎫 Autenticação via JWT armazenado em `sessionStorage` e enviado pelo interceptor HTTP.
 
----
+## 🧰 Stack e Frameworks
 
-## 🎯 Decisões de UX Baseadas na Persona Roberto
+- Angular 17.
+- Angular CLI 17.
+- Angular Material/CDK.
+- RxJS.
+- Chart.js com ng2-charts.
+- xlsx para recursos de planilha/exportação.
+- TypeScript 5.4.
 
-### Perfil do Roberto
-- **Idade:** ~50 anos
-- **Experiência:** Pouco habituado com sistemas web
-- **Dispositivo principal:** Celular
-- **Necessidades:** Clareza, simplicidade, tempo otimizado
+## 🗂️ Estrutura Relevante
 
----
-
-### ✅ Decisões de Design Implementadas
-
-#### 1. **Interface Minimalista e Clara**
-**Problema:** Roberto pode se sentir sobrecarregado com muitas informações.
-
-**Solução:**
-- ✅ Apenas 2 campos de entrada (email e senha)
-- ✅ Um único botão de ação principal
-- ✅ Linguagem direta e sem jargões técnicos
-- ✅ Uso de ícones grandes e reconhecíveis
-
-**Impacto:** Reduz ansiedade e facilita o entendimento imediato da tela.
-
----
-
-#### 2. **Botões Grandes e Espaçamento Generoso**
-**Problema:** Roberto usa celular e pode ter dificuldade com alvos pequenos.
-
-**Solução:**
-- ✅ Botão de login com **56px de altura** (área de toque confortável)
-- ✅ Campos de entrada com **padding de 1rem** (16px)
-- ✅ Espaçamento entre elementos de **1.5rem** (24px)
-- ✅ Botão de mostrar/ocultar senha com área clicável ampla
-
-**Impacto:** Reduz erros de toque e frustração, especialmente em telas pequenas.
-
----
-
-#### 3. **Feedback Visual Claro**
-**Problema:** Roberto precisa de confirmação visual de que suas ações estão sendo processadas.
-
-**Solução:**
-- ✅ **Loading spinner** animado durante o login
-- ✅ **Banner de erro vermelho** destacado no topo quando há problema
-- ✅ **Mensagens de validação** diretas abaixo de cada campo
-- ✅ **Hover e focus states** em todos elementos interativos
-- ✅ **Animação de entrada** suave no card de login
-
-**Impacto:** Roberto sabe exatamente o que está acontecendo a cada momento.
-
----
-
-#### 4. **Validação Simplificada e Amigável**
-**Problema:** Mensagens técnicas podem confundir Roberto.
-
-**Solução:**
-- ✅ "Digite seu email" ao invés de "Campo obrigatório"
-- ✅ "Email inválido" ao invés de "Formato de email não corresponde ao padrão RFC 5322"
-- ✅ Validação apenas ao **tocar o campo e sair** (não antes)
-- ✅ Erros mostrados individualmente e de forma contextual
-
-**Impacto:** Linguagem próxima e compreensível, sem intimidação.
-
----
-
-#### 5. **Mobile First + Totalmente Responsivo**
-**Problema:** Roberto usa principalmente o celular.
-
-**Solução:**
-- ✅ Design pensado primeiro para **mobile** (320px+)
-- ✅ Card de login se adapta perfeitamente a qualquer tela
-- ✅ Breakpoints estratégicos para tablets (640px) e desktop
-- ✅ Fonte legível em qualquer tamanho de tela (mínimo 0.875rem)
-- ✅ Botões e inputs otimizados para toque
-
-**Impacto:** Experiência consistente independente do dispositivo.
-
----
-
-#### 6. **Acessibilidade Incorporada**
-**Problema:** Roberto pode ter dificuldades visuais ou motoras.
-
-**Solução:**
-- ✅ **Labels descritivos** para leitores de tela
-- ✅ **Autocomplete** configurado (email, current-password)
-- ✅ **Estados de foco** bem definidos (outline azul)
-- ✅ **Contraste de cores** WCAG AA compliant
-- ✅ **Redução de movimento** para usuários sensíveis (prefers-reduced-motion)
-- ✅ **Aria-labels** no botão de mostrar/ocultar senha
-
-**Impacto:** Inclusão de todos usuários, independente de limitações.
-
----
-
-#### 7. **Design Visual Moderno mas Amigável**
-**Problema:** Roberto precisa confiar no sistema.
-
-**Solução:**
-- ✅ **Gradiente suave** no fundo (transmite profissionalismo)
-- ✅ **Ícone de caminhão** no logo (contexto logístico claro)
-- ✅ **Cores primárias azuis** (confiabilidade e seriedade)
-- ✅ **Sombras suaves** (profundidade sem exagero)
-- ✅ **Cantos arredondados** (amigável, não intimidador)
-
-**Impacto:** Roberto se sente seguro e confortável ao usar o sistema.
-
----
-
-#### 8. **Interações Intuitivas**
-**Problema:** Roberto pode não conhecer padrões web complexos.
-
-**Solução:**
-- ✅ Botão "Mostrar senha" com **ícone de olho** (padrão universal)
-- ✅ **Placeholder** nos campos mostrando formato esperado
-- ✅ **Animação no botão** ao passar o mouse (affordance)
-- ✅ **Desabilitação visual** do botão durante loading
-- ✅ Link "Esqueceu sua senha?" em posição esperada (direita superior)
-
-**Impacto:** Não há necessidade de aprendizado, tudo é autoexplicativo.
-
----
-
-## 🔧 Aspectos Técnicos
-
-### Angular 17 Standalone Component
-```typescript
-- ✅ Sem módulos (standalone: true)
-- ✅ Reactive Forms com validação
-- ✅ CommonModule e ReactiveFormsModule importados
-- ✅ Preparado para produção
+```text
+src/app/
+  config/                 Configuração da URL base da API
+  dashboard/              Layout e componentes do dashboard
+  models/                 Interfaces/modelos usados pela aplicação
+  screens/                Telas principais do sistema
+  services/               Serviços HTTP e autenticação
+  app.routes.ts           Rotas da aplicação
+  app.config.ts           Providers globais, HTTP client e interceptor JWT
 ```
 
-### AuthService Escalável
-```typescript
-- ✅ Método login() com Observable
-- ✅ Mock funcional para desenvolvimento
-- ✅ Comentários indicando onde adicionar integração real
-- ✅ Tratamento de erro estruturado
-- ✅ Delay simulado de rede (realista)
+## ✅ Pré-requisitos
+
+- Node.js compatível com Angular 17.
+- npm.
+- Backend Djelog Solutions rodando e acessível pela URL configurada.
+
+## 🔌 Configuração da API
+
+A URL do backend fica em:
+
+```text
+src/app/config/api.config.ts
 ```
 
-### CSS Profissional
-```typescript
-- ✅ Variáveis CSS para fácil tematização
-- ✅ Mobile-first com breakpoints estratégicos
-- ✅ Animações suaves e performáticas
-- ✅ Preparado para dark mode futuro
-- ✅ Sem dependências externas
+Configuração local padrão:
+
+```ts
+export const API_CONFIG = {
+  baseUrl: 'http://localhost:8080'
+};
 ```
 
----
+Para produção, ajuste `baseUrl` para a URL pública do backend antes do build/deploy. O arquivo já contém, como referência, uma URL comentada do backend hospedado no Render.
 
-## 📱 Responsividade
+## 🚀 Como Iniciar em Desenvolvimento
 
-### Mobile (< 375px)
-- Card ocupa 100% com padding reduzido
-- Logo menor (64px)
-- Texto de título menor (1.5rem)
+Instale as dependências:
 
-### Mobile padrão (375px - 640px)
-- Card centralizado com max-width 420px
-- Logo 72px
-- Espaçamentos otimizados
-
-### Tablet+ (> 640px)
-- Padding lateral aumentado no card
-- Fonte de título maior (2rem)
-
----
-
-## 🚀 Como Usar
-
-### 1. Importar o componente no app.routes.ts ou app.module.ts
-```typescript
-import { LoginComponent } from './screens/login/login.component';
-
-// Em routes:
-{ path: 'login', component: LoginComponent }
+```bash
+npm install
 ```
 
-### 2. O AuthService já está injetável globalmente
-```typescript
-// providedIn: 'root' já configurado
-// Nada precisa ser feito
+Inicie o servidor local:
+
+```bash
+npm start
 ```
 
-### 3. Integração futura com backend
-```typescript
-// No auth.service.ts, substituir o mock por:
-return this.http.post<LoginResponse>(
-  `${environxperience for ment. developed using Aii arIAAI agents alosongside with me as a decopitlotapiUrl}/auth/login`, 
-  { email, password }
-);
+Por padrão, a aplicação fica disponível em:
+
+```text
+http://localhost:4200
 ```
 
----
+## 📜 Scripts Disponíveis
 
-## ✨ Resultado Final
+```bash
+npm start
+```
 
-Uma tela de login que:
-- ✅ **Roberto consegue usar no celular sem frustração**
-- ✅ **Fornece feedback claro em todas as ações**
-- ✅ **Não intimida com jargões técnicos**
-- ✅ **É profissional e transmite confiança**
-- ✅ **Está pronta para produção**
-- ✅ **É acessível e inclusiva**
+Executa `ng serve` em modo desenvolvimento.
 
----
+```bash
+npm run build
+```
 
-## 📝 Próximos Passos Sugeridos
+Gera a build de produção em `dist/djelog-solutions-web`.
 
-1. **Adicionar Router** para navegação após login
-2. **Implementar AuthGuard** para proteção de rotas
-3. **Criar interceptor HTTP** para adicionar token nas requisições
-4. **Adicionar persistência de token** (localStorage/sessionStorage)
-5. **Implementar recuperação de senha**
-6. **Adicionar opção de "Lembrar-me"**
-7. **Criar tela de primeiro acesso**
+```bash
+npm test
+```
 
----
+Executa `ng test`. Caso a configuração de testes não esteja completa no clone atual, revise os arquivos de suporte do Angular/Karma antes de usar este comando no CI.
 
-**Desenvolvido com foco em UX e acessibilidade para usuários reais. 🚀**
+## 🧭 Rotas Principais
+
+- `/login`: tela de login.
+- `/register`: cadastro de usuário.
+- `/dashboard`: dashboard principal.
+- `/dashboard/motoristas`: gestão de motoristas/profissionais.
+- `/dashboard/veiculos`: gestão de veículos.
+- `/dashboard/empresas`: gestão de empresas.
+- `/dashboard/viagens`: gestão de viagens.
+- `/dashboard/viagens-comissionadas`: gestão de viagens comissionadas.
+- `/dashboard/estadias`: gestão de estadias.
+- `/dashboard/configuracoes`: configurações do usuário.
+- `/dashboard/relatorios`: relatórios.
+- `/dashboard/relatorios/por-data`: relatório por período.
+
+## 🔐 Autenticação
+
+O login usa o endpoint `POST /api/auth/login`. Em caso de sucesso, a aplicação salva no `sessionStorage`:
+
+- `authToken`
+- `userId`
+- `userEmail`
+- `userName`
+
+O interceptor em `src/app/services/auth/auth.interceptor.ts` adiciona o header:
+
+```text
+Authorization: Bearer <token>
+```
+
+em requisições HTTP quando existe token salvo.
+
+## 🔗 Integração com o Backend
+
+Os serviços Angular consomem os endpoints do backend a partir de `API_CONFIG.baseUrl`. As principais bases de endpoint usadas são:
+
+- `/api/auth`
+- `/api/cargo`
+- `/api/profissional`
+- `/api/veiculo`
+- `/api/empresa`
+- `/api/viagem`
+- `/api/viagem-comissionada`
+- `/api/estadias`
+- `/api/despesas`
